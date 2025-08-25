@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Student_management.Models;
+namespace Student_Management.Models;
 
 public partial class Diem
 {
@@ -11,23 +11,21 @@ public partial class Diem
 
     public int MaMonHoc { get; set; }
 
-    public int MaHocKy { get; set; }
+    public int MaHk { get; set; }
 
-    public int MaLoaiDiem { get; set; }
+    public double? DiemMieng { get; set; }
 
-    public decimal DiemSo { get; set; }
+    public double? Diem15p { get; set; }
 
-    public int? LanThi { get; set; }
+    public double? Diem1Tiet { get; set; }
 
-    public DateOnly? NgayKiemTra { get; set; }
+    public double? DiemThi { get; set; }
 
-    public int? NguoiNhap { get; set; }
+    public double? DiemTb { get; set; }
 
-    public virtual HocKy MaHocKyNavigation { get; set; } = null!;
+    public virtual Hocky MaHkNavigation { get; set; } = null!;
 
-    public virtual HocSinh MaHsNavigation { get; set; } = null!;
+    public virtual Hocsinh MaHsNavigation { get; set; } = null!;
 
-    public virtual LoaiDiem MaLoaiDiemNavigation { get; set; } = null!;
-
-    public virtual MonHoc MaMonHocNavigation { get; set; } = null!;
+    public virtual Monhoc MaMonHocNavigation { get; set; } = null!;
 }

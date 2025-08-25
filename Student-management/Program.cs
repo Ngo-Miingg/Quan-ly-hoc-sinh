@@ -1,53 +1,57 @@
-﻿// Program.cs
-
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Student_management.Models;
+using Student_Management.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Lấy chuỗi kết nối từ appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// 1. Đăng ký dịch vụ MVC
+builder.Services.AddControllersWithViews();
 
-// **Đăng ký tất cả dịch vụ trước khi gọi builder.Build()**
-
+// 2. Đăng ký DbContext
 builder.Services.AddDbContext<QuanLyHocSinhContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("QuanLyHocSinh")));
 
+// 3. Đăng ký Session
+builder.Services.AddSession();
 
-// Cấu hình dịch vụ xác thực bằng cookie
+// 4. Đăng ký Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login";
-        options.AccessDeniedPath = "/Home/AccessDenied";
+        options.LoginPath = "/Auth/Login";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
     });
 
-// Thêm các dịch vụ vào container
-builder.Services.AddControllersWithViews();
+// 5. Đăng ký Authorization (phân quyền)
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("RequireGiaoVien", policy => policy.RequireRole("GiaoVien"));
+    options.AddPolicy("RequireHocSinh", policy => policy.RequireRole("HocSinh"));
+});
 
+// ✅ Build sau khi Add xong mọi dịch vụ
 var app = builder.Build();
 
-// **Sau khi app được build, cấu hình pipeline HTTP**
-
-// Cấu hình pipeline HTTP
+// 6. Cấu hình middleware
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Account/Login");
-    // Thêm các middleware khác ở đây
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
+builder.Services.AddSession();
+app.UseSession();
 
-// Thêm các middleware cần thiết
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-// Sử dụng xác thực và phân quyền
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseSession(); // middleware session
+app.UseAuthentication(); // middleware xác thực
+app.UseAuthorization();  // middleware phân quyền
 
-// Thiết lập routing cho các Controller và Action
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

@@ -1,8 +1,8 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Student_management.Models;
+using Student_Management.Models;
 
-namespace Student_management.Controllers
+namespace Student_Management.Controllers
 {
     public class HomeController : Controller
     {
@@ -22,7 +22,10 @@ namespace Student_management.Controllers
         {
             return View();
         }
-
+        public IActionResult HocSinḥ̣()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

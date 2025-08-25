@@ -1,0 +1,41 @@
+﻿@model Student_Management.Models.Giaovien
+
+@{
+    ViewData["Title"] = "Chi tiết Giáo viên";
+}
+
+<h2>@Model.HoTen</h2>
+
+<p><strong>Email:</strong> @Model.Email</p>
+<p><strong>SĐT:</strong> @Model.Sdt</p>
+<p><strong>Địa chỉ:</strong> @Model.DiaChi</p>
+<p><strong>Ngày sinh:</strong> @Model.NgaySinh?.ToString("dd/MM/yyyy")</p>
+<p><strong>Môn dạy:</strong> @Model.MaMonHocNavigation?.TenMonHoc</p>
+<p><strong>Lớp chủ nhiệm:</strong> @(Model.Lops.FirstOrDefault()?.TenLop ?? "—")</p>
+
+<hr />
+<h4>Lịch dạy</h4>
+@if (Model.Lichhocs.Any())
+{
+    <table class="table table-striped">
+        <tr><th>Môn</th><th>Lớp</th><th>Thứ</th><th>Tiết</th></tr>
+        @foreach (var lich in Model.Lichhocs)
+        {
+            <tr>
+                <td>@lich.MaMonHocNavigation?.TenMonHoc</td>
+                <td>@lich.MaLopNavigation?.TenLop</td>
+                <td>@lich.ThuTrongTuan</td>
+                <td>@lich.TietHoc</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Chưa có lịch giảng dạy</p>
+}
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.MaGv" class="btn btn-warning">Sửa</a>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</p>
