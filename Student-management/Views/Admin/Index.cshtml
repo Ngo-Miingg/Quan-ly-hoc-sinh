@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Bảng điều khiển Admin";
+}
+
+<h1>Chào mừng, Quản Trị Viên!</h1>
+<p>Bạn có thể sử dụng bảng điều khiển này để quản lý hệ thống.</p>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Tài khoản</h5>
+                <p class="card-text">
+                    Tạo tài khoản mới cho giáo viên và học sinh,
+                    xem danh sách người dùng, hoặc chỉnh sửa thông tin.
+                </p>
+                <a asp-controller="Admin" asp-action="CreateUser" class="btn btn-primary">Tạo tài khoản</a>
+                <a asp-controller="Admin" asp-action="ListUsers" class="btn btn-secondary">Xem danh sách</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Lớp học</h5>
+                <p class="card-text">
+                    Thêm, sửa, hoặc xóa các lớp học trong hệ thống.
+                </p>
+                <a asp-controller="Admin" asp-action="Classroom" class="btn btn-primary">Quản lý Lớp học</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Học sinh</h5>
+                <p class="card-text">
+                    Thêm, sửa, xóa thông tin học sinh và quản lý sĩ số lớp.
+                </p>
+                <a asp-controller="HocSinh" asp-action="Index" class="btn btn-primary">Quản lý Học sinh</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Giáo viên</h5>
+                <p class="card-text">
+                    Xem và chỉnh sửa thông tin giáo viên.
+                </p>
+                <a asp-controller="GiaoVien" asp-action="Index" class="btn btn-primary">Quản lý Giáo viên</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Quản lý Điểm số</h5>
+                <p class="card-text">
+                    Chức năng đang phát triển
+                </p>
+                <a href="#" class="btn btn-secondary disabled">Quản lý Điểm số</a>
+            </div>
+        </div>
+    </div>
+</div>

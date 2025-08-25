@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Student_management.Models.Lop>
+
+@{
+    ViewData["Title"] = "Quản lý Lớp học";
+}
+
+<h1>Quản lý Lớp học</h1>
+
+<p>
+    <a asp-action="CreateClassroom" class="btn btn-primary">Thêm Lớp học mới</a>
+</p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên Lớp</th>
+            <th>Sĩ số</th>
+            <th>Năm học</th>
+            <th>Giáo viên Chủ nhiệm</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TenLop</td>
+                <td>@item.SiSo</td>
+                <td>@item.MaNamHocNavigation.TenNamHoc</td>
+                <td>@item.MaGvcnNavigation.MaNguoiDungNavigation.HoTen</td>
+                <td>
+                    <a asp-action="EditClassroom" asp-route-id="@item.MaLop">Sửa</a> |
+                    <a asp-action="DeleteClassroom" asp-route-id="@item.MaLop">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,29 @@
+﻿@model Student_management.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "Xóa Người dùng";
+}
+
+<h1>Xóa Người dùng</h1>
+
+<h3>Bạn có chắc chắn muốn xóa người dùng này không?</h3>
+<div>
+    <h4>Người dùng</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Họ và tên:</dt>
+        <dd class="col-sm-9">@Model.HoTen</dd>
+
+        <dt class="col-sm-3">Email:</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Vai trò:</dt>
+        <dd class="col-sm-9">@Model.TaiKhoan?.MaVaiTroNavigation?.TenVaiTro</dd>
+    </dl>
+
+    <form asp-action="DeleteUser" method="post">
+        <input type="hidden" asp-for="MaNguoiDung" />
+        <button type="submit" class="btn btn-danger">Xác nhận Xóa</button> |
+        <a asp-action="ListUsers" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

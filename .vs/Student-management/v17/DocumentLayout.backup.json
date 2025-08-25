@@ -1,0 +1,160 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|d:\\tailieunam3\\hocky1\\congnghephanmen\\student-management\\student-management\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|solutionrelative:student-management\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|d:\\tailieunam3\\hocky1\\congnghephanmen\\student-management\\student-management\\views\\admin\\listusers.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|solutionrelative:student-management\\views\\admin\\listusers.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|d:\\tailieunam3\\hocky1\\congnghephanmen\\student-management\\student-management\\views\\hocsinh\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|solutionrelative:student-management\\views\\hocsinh\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|d:\\tailieunam3\\hocky1\\congnghephanmen\\student-management\\student-management\\controllers\\hocsinhcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|solutionrelative:student-management\\controllers\\hocsinhcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|d:\\tailieunam3\\hocky1\\congnghephanmen\\student-management\\student-management\\views\\admin\\createuser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|solutionrelative:student-management\\views\\admin\\createuser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|d:\\tailieunam3\\hocky1\\congnghephanmen\\student-management\\student-management\\views\\hocsinh\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|solutionrelative:student-management\\views\\hocsinh\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|d:\\tailieunam3\\hocky1\\congnghephanmen\\student-management\\student-management\\views\\hocsinh\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|solutionrelative:student-management\\views\\hocsinh\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|d:\\tailieunam3\\hocky1\\congnghephanmen\\student-management\\student-management\\views\\hocsinh\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{54099FEF-9EDC-42A5-856B-4321904EE3DB}|Student-management\\Student-management.csproj|solutionrelative:student-management\\views\\hocsinh\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f53-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Student-management\\Controllers\\AdminController.cs",
+              "ToolTip": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Controllers\\AdminController.cs*",
+              "RelativeToolTip": "Student-management\\Controllers\\AdminController.cs*",
+              "ViewState": "AgIAACABAAAAAAAAAAAIwDUBAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-25T19:55:15.949Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ListUsers.cshtml",
+              "DocumentMoniker": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\Admin\\ListUsers.cshtml",
+              "RelativeDocumentMoniker": "Student-management\\Views\\Admin\\ListUsers.cshtml",
+              "ToolTip": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\Admin\\ListUsers.cshtml",
+              "RelativeToolTip": "Student-management\\Views\\Admin\\ListUsers.cshtml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAABQAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-25T19:53:31.399Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CreateUser.cshtml",
+              "DocumentMoniker": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\Admin\\CreateUser.cshtml",
+              "RelativeDocumentMoniker": "Student-management\\Views\\Admin\\CreateUser.cshtml",
+              "ToolTip": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\Admin\\CreateUser.cshtml",
+              "RelativeToolTip": "Student-management\\Views\\Admin\\CreateUser.cshtml",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAEQAAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-25T19:52:09.01Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\HocSinh\\Delete.cshtml",
+              "RelativeDocumentMoniker": "Student-management\\Views\\HocSinh\\Delete.cshtml",
+              "ToolTip": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\HocSinh\\Delete.cshtml",
+              "RelativeToolTip": "Student-management\\Views\\HocSinh\\Delete.cshtml",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAIwBEAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-25T19:42:16.303Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\HocSinh\\Edit.cshtml",
+              "RelativeDocumentMoniker": "Student-management\\Views\\HocSinh\\Edit.cshtml",
+              "ToolTip": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\HocSinh\\Edit.cshtml",
+              "RelativeToolTip": "Student-management\\Views\\HocSinh\\Edit.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAIwAMAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-25T19:42:10.637Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\HocSinh\\Create.cshtml",
+              "RelativeDocumentMoniker": "Student-management\\Views\\HocSinh\\Create.cshtml",
+              "ToolTip": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\HocSinh\\Create.cshtml",
+              "RelativeToolTip": "Student-management\\Views\\HocSinh\\Create.cshtml",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-25T19:42:04.616Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\HocSinh\\Index.cshtml",
+              "RelativeDocumentMoniker": "Student-management\\Views\\HocSinh\\Index.cshtml",
+              "ToolTip": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Views\\HocSinh\\Index.cshtml",
+              "RelativeToolTip": "Student-management\\Views\\HocSinh\\Index.cshtml",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAIwCIAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-25T19:41:58.524Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "HocSinhController.cs",
+              "DocumentMoniker": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Controllers\\HocSinhController.cs",
+              "RelativeDocumentMoniker": "Student-management\\Controllers\\HocSinhController.cs",
+              "ToolTip": "D:\\TaiLieuNam3\\HocKy1\\CongNghePhanMen\\Student-management\\Student-management\\Controllers\\HocSinhController.cs",
+              "RelativeToolTip": "Student-management\\Controllers\\HocSinhController.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAswDkAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-25T19:41:11.272Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

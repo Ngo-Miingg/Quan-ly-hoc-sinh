@@ -1,0 +1,39 @@
+﻿@model Student_management.Models.Lop
+
+@{
+    ViewData["Title"] = "Xóa Lớp học";
+}
+
+<h1>Xóa Lớp học</h1>
+
+<h3>Bạn có chắc chắn muốn xóa lớp học này không?</h3>
+<div>
+    <h4>Lớp học</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            Tên Lớp:
+        </dt>
+        <dd class="col-sm-9">
+            @Model.TenLop
+        </dd>
+        <dt class="col-sm-3">
+            Năm học:
+        </dt>
+        <dd class="col-sm-9">
+            @Model.MaNamHocNavigation.TenNamHoc
+        </dd>
+        <dt class="col-sm-3">
+            Giáo viên Chủ nhiệm:
+        </dt>
+        <dd class="col-sm-9">
+            @Model.MaGvcnNavigation.MaNguoiDungNavigation.HoTen
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteClassroom" method="post">
+        <input type="hidden" asp-for="MaLop" />
+        <button type="submit" class="btn btn-danger">Xác nhận Xóa</button> |
+        <a asp-action="Classroom" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

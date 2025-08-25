@@ -1,0 +1,37 @@
+﻿@model Student_management.Models.HocSinh
+
+@{
+    ViewData["Title"] = "Xóa Học sinh";
+}
+
+<h1>Xóa Học sinh</h1>
+
+<h3>Bạn có chắc chắn muốn xóa học sinh này không?</h3>
+<div>
+    <h4>Học sinh</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Họ và tên:</dt>
+        <dd class="col-sm-9">@Model.MaNguoiDungNavigation?.HoTen</dd>
+
+        <dt class="col-sm-3">Lớp:</dt>
+        <dd class="col-sm-9">@Model.MaLopNavigation?.TenLop</dd>
+
+        <dt class="col-sm-3">Ngày sinh:</dt>
+        <dd class="col-sm-9">
+            @if (Model.MaNguoiDungNavigation?.NgaySinh.HasValue == true)
+            {
+                @Model.MaNguoiDungNavigation.NgaySinh.Value.ToString("dd/MM/yyyy")
+            }
+        </dd>
+
+        <dt class="col-sm-3">Giới tính:</dt>
+        <dd class="col-sm-9">@Model.MaNguoiDungNavigation?.GioiTinh</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="MaHs" />
+        <button type="submit" class="btn btn-danger">Xác nhận Xóa</button> |
+        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

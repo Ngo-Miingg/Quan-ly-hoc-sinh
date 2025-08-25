@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Student_management.Models.HocSinh>
+@using System.Linq
+
+@{
+    ViewData["Title"] = "Danh sách Học sinh";
+}
+
+<h1>Danh sách Học sinh</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Thêm Học sinh</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Họ và tên</th>
+            <th>Lớp học</th>
+            <th>Ngày sinh</th>
+            <th>Giới tính</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaNguoiDungNavigation?.HoTen</td>
+                <td>@item.MaLopNavigation?.TenLop</td>
+                <td>
+                    @if (item.MaNguoiDungNavigation?.NgaySinh.HasValue == true)
+                    {
+                        @item.MaNguoiDungNavigation.NgaySinh.Value.ToString("dd/MM/yyyy")
+                    }
+                </td>
+                <td>@item.MaNguoiDungNavigation?.GioiTinh</td>
+                <td>@item.MaNguoiDungNavigation?.Email</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MaHs">Sửa</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MaHs">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
