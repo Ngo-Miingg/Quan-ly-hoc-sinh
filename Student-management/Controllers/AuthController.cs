@@ -1,176 +1,115 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Student_Management.Models;
-using System.Security.Cryptography;
-using System.Text;
 
-namespace Student_Management.Controllers;
-
-public class AuthController(QuanLyHocSinhContext context) : Controller
+namespace Student_Management.Controllers
 {
-    private readonly QuanLyHocSinhContext _context = context;
-
-    // GET: /Auth/Login
-    public IActionResult Login() => View();
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(string username, string password)
+    public class AuthController : Controller
     {
-        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        private readonly QuanLyHocSinhContext _context;
+
+        public AuthController(QuanLyHocSinhContext context)
         {
-            ViewBag.Error = "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu.";
+            _context = context;
+        }
+
+        // GET: /Auth/Login
+        [HttpGet]
+        public IActionResult Login()
+        {
             return View();
         }
 
-        string hashedPassword = HashPassword(password);
-        var account = await _context.Taikhoans
-            .FirstOrDefaultAsync(t => t.TenDangNhap == username && t.MatKhau == hashedPassword);
-
-        if (account == null)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            ViewBag.Error = "Tên đăng nhập hoặc mật khẩu không đúng.";
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var account = await _context.TaiKhoans
+                .FirstOrDefaultAsync(t => t.TenDangNhap == model.TenDangNhap);
+
+            // Kiểm tra tài khoản và xác thực mật khẩu bằng BCrypt
+            if (account == null || !BCrypt.Net.BCrypt.Verify(model.MatKhau, account.MatKhau))
+            {
+                ViewBag.Error = "Tên đăng nhập hoặc mật khẩu không đúng.";
+                return View(model);
+            }
+
+            // Lưu thông tin vào Session
+            HttpContext.Session.SetString("Username", account.TenDangNhap);
+            HttpContext.Session.SetString("Role", account.VaiTro ?? "Default");
+            HttpContext.Session.SetInt32("UserId", account.MaTaiKhoan);
+
+            // Điều hướng dựa trên vai trò
+            return RedirectToRole(account.VaiTro);
+        }
+
+        // GET: /Auth/Register
+        [HttpGet]
+        public IActionResult Register()
+        {
             return View();
         }
 
-        HttpContext.Session.SetString("Username", account.TenDangNhap);
-        HttpContext.Session.SetString("Role", account.VaiTro);
-        HttpContext.Session.SetInt32("UserId", account.MaTk);
-
-        return RedirectToAction("Index", account.VaiTro switch
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(string username, string password, string confirmPassword, string role = "HocSinh")
         {
-            "Admin" => "Admin",
-            "GiaoVien" => "GiaoVien",
-            "HocSinh" => "HocSinh",
-            _ => "Home"
-        });
-    }
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                ViewBag.Error = "Tên đăng nhập và mật khẩu không được để trống.";
+                return View();
+            }
 
-    // GET: /Auth/Register
-    public IActionResult Register() => View();
+            if (password != confirmPassword)
+            {
+                ViewBag.Error = "Mật khẩu xác nhận không khớp.";
+                return View();
+            }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(string username, string password, string confirmPassword, string role)
-    {
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
-        {
-            ViewBag.Error = "Vui lòng nhập đầy đủ thông tin.";
-            return View();
-        }
+            bool exists = await _context.TaiKhoans.AnyAsync(t => t.TenDangNhap == username);
+            if (exists)
+            {
+                ViewBag.Error = "Tên đăng nhập đã tồn tại.";
+                return View();
+            }
 
-        if (password != confirmPassword)
-        {
-            ViewBag.Error = "Mật khẩu xác nhận không khớp.";
-            return View();
-        }
+            var newAccount = new TaiKhoan
+            {
+                TenDangNhap = username,
+                // Băm mật khẩu bằng BCrypt trước khi lưu
+                MatKhau = BCrypt.Net.BCrypt.HashPassword(password),
+                VaiTro = role
+            };
 
-        bool exists = await _context.Taikhoans.AnyAsync(t => t.TenDangNhap == username);
-        if (exists)
-        {
-            ViewBag.Error = "Tên đăng nhập đã tồn tại.";
-            return View();
-        }
+            _context.Add(newAccount);
+            await _context.SaveChangesAsync();
 
-        var newAccount = new Taikhoan
-        {
-            TenDangNhap = username,
-            MatKhau = HashPassword(password),
-            VaiTro = role
-        };
-
-        _context.Add(newAccount);
-        await _context.SaveChangesAsync();
-
-        ViewBag.Success = "Đăng ký thành công. Vui lòng đăng nhập.";
-        return View();
-    }
-
-    // GET: /Auth/ForgotPassword
-    public IActionResult ForgotPassword() => View();
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ForgotPassword(string username, string newPassword, string confirmNewPassword)
-    {
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmNewPassword))
-        {
-            ViewBag.Error = "Vui lòng nhập đầy đủ thông tin.";
-            return View();
-        }
-
-        if (newPassword != confirmNewPassword)
-        {
-            ViewBag.Error = "Mật khẩu xác nhận không khớp.";
-            return View();
-        }
-
-        var account = await _context.Taikhoans.FirstOrDefaultAsync(t => t.TenDangNhap == username);
-        if (account == null)
-        {
-            ViewBag.Error = "Không tìm thấy tài khoản.";
-            return View();
-        }
-
-        account.MatKhau = HashPassword(newPassword);
-        _context.Update(account);
-        await _context.SaveChangesAsync();
-
-        ViewBag.Success = "Đặt lại mật khẩu thành công. Vui lòng đăng nhập.";
-        return View();
-    }
-
-    // GET: /Auth/ChangePassword
-    public IActionResult ChangePassword() => View();
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword, string confirmNewPassword)
-    {
-        string? username = HttpContext.Session.GetString("Username");
-        if (string.IsNullOrEmpty(username))
-        {
+            ViewBag.Success = "Đăng ký thành công. Vui lòng đăng nhập.";
             return RedirectToAction("Login");
         }
 
-        var account = await _context.Taikhoans.FirstOrDefaultAsync(t => t.TenDangNhap == username);
-        if (account == null)
+        // GET: /Auth/Logout
+        public IActionResult Logout()
         {
+            HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
 
-        if (HashPassword(oldPassword) != account.MatKhau)
+        // Hàm điều hướng tiện ích
+        private IActionResult RedirectToRole(string? role)
         {
-            ViewBag.Error = "Mật khẩu cũ không đúng.";
-            return View();
+            return RedirectToAction("Index", role switch
+            {
+                "Admin" => "Admin",
+                "GiaoVien" => "GiaoVien",
+                "HocSinh" => "HocSinh",
+                _ => "Home"
+            });
         }
-
-        if (newPassword != confirmNewPassword)
-        {
-            ViewBag.Error = "Mật khẩu xác nhận không khớp.";
-            return View();
-        }
-
-        account.MatKhau = HashPassword(newPassword);
-        _context.Update(account);
-        await _context.SaveChangesAsync();
-
-        ViewBag.Success = "Đổi mật khẩu thành công.";
-        return View();
-    }
-
-    // Đăng xuất
-    public IActionResult Logout()
-    {
-        HttpContext.Session.Clear();
-        return RedirectToAction("Login");
-    }
-
-    // Băm mật khẩu SHA256
-    private static string HashPassword(string password)
-    {
-        byte[] bytes = Encoding.UTF8.GetBytes(password);
-        byte[] hash = SHA256.HashData(bytes);
-        return Convert.ToHexString(hash); // viết hoa A-F
     }
 }

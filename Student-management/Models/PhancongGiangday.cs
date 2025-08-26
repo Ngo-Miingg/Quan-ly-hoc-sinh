@@ -1,25 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿// File: PhanCongGiangDay.cs
 namespace Student_Management.Models;
 
-public partial class PhancongGiangday
+public partial class PhanCongGiangDay
 {
-    public int MaPc { get; set; }
-
-    public int MaGv { get; set; }
-
+    public int MaPhanCong { get; set; }
+    public int MaGiaoVien { get; set; }
     public int MaMonHoc { get; set; }
+    public int MaLopHoc { get; set; }
+    public int MaHocKy { get; set; }
 
-    public int MaLop { get; set; }
-
-    public int MaHk { get; set; }
-
-    public virtual Giaovien MaGvNavigation { get; set; } = null!;
-
-    public virtual Hocky MaHkNavigation { get; set; } = null!;
-
-    public virtual Lop MaLopNavigation { get; set; } = null!;
-
-    public virtual Monhoc MaMonHocNavigation { get; set; } = null!;
+    // Navigation Properties
+    public virtual GiaoVien GiaoVien { get; set; } = null!;
+    public virtual HocKy HocKy { get; set; } = null!;
+    public virtual Lop LopHoc { get; set; } = null!;
+    public virtual MonHoc MonHoc { get; set; } = null!;
 }

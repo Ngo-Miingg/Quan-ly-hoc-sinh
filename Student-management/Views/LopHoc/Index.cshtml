@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Student_Management.Models.LopHoc>
+@{
+    ViewData["Title"] = "Quản lý Lớp học";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p><a asp-action="Create" class="btn btn-primary">Tạo Lớp học Mới</a></p>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<table class="table table-hover">
+    <thead class="table-light">
+        <tr><th>Tên Lớp</th><th>Năm Học</th><th>GV Chủ nhiệm</th><th>Sĩ Số</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TenLopHoc</td>
+                <td>@item.NamHoc.TenNamHoc</td>
+                <td>@(item.GiaoVienChuNhiem?.HoTen ?? "Chưa có")</td>
+                <td>@item.HocSinhs.Count()</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MaLopHoc">Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.MaLopHoc">Chi tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MaLopHoc">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

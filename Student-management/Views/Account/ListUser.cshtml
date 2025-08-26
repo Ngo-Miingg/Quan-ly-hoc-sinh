@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Student_Management.Models.TaiKhoan>
+@{
+    ViewData["Title"] = "Danh sách Tài khoản";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p><a asp-action="CreateUser" class="btn btn-primary">Tạo Tài khoản Mới</a></p>
+
+<table class="table">
+    <thead>
+        <tr><th>Tên Đăng Nhập</th><th>Vai Trò</th><th>Người Dùng Liên Kết</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TenDangNhap</td>
+                <td>@item.VaiTro</td>
+                <td>@(item.HocSinh?.HoTen ?? item.GiaoVien?.HoTen ?? "Tài khoản Quản trị")</td>
+                <td>
+                    <a asp-action="EditUser" asp-route-id="@item.MaTaiKhoan">Sửa</a> |
+                    <a asp-action="DeleteUser" asp-route-id="@item.MaTaiKhoan">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

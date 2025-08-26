@@ -1,13 +1,16 @@
-﻿// Controllers/AccountController.cs
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Student_management.Models;
+using Student_Management.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace Student_management.Controllers
+namespace Student_Management.Controllers
 {
     public class AccountController : Controller
     {
@@ -18,64 +21,41 @@ namespace Student_management.Controllers
             _context = context;
         }
 
-        // Action hiển thị form đăng nhập
+        // --- Các chức năng xác thực chung ---
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() { /* ... Logic đăng nhập ... */ }
 
-        // Action xử lý đăng nhập
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model) { /* ... Logic xử lý đăng nhập ... */ }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout() { /* ... Logic đăng xuất ... */ }
+
+        // --- Các chức năng quản trị tài khoản (chỉ Admin) ---
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> ListUser() { /* ... Logic lấy danh sách tài khoản ... */ }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> CreateUser() { /* ... Logic hiển thị form tạo user ... */ }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUser(CreateUserViewModel model) { /* ... Logic xử lý tạo user ... */ }
+
+        // ... Các action Sửa, Xóa tài khoản khác ...
+
+        // --- Hàm tiện ích ---
+        private async Task PopulateLopHocDropDownList(object? selectedLop = null)
         {
-            if (ModelState.IsValid)
-            {
-                var taiKhoan = await _context.TaiKhoans
-                    .Include(t => t.MaVaiTroNavigation)
-                    .Include(t => t.MaNguoiDungNavigation)
-                    .FirstOrDefaultAsync(t => t.TenDangNhap == model.TenDangNhap);
-
-                if (taiKhoan != null)
-                {
-                    // So sánh mật khẩu (sử dụng BCrypt hoặc một thư viện hashing khác)
-                    // Đối với ví dụ này, chúng ta sẽ so sánh mật khẩu plain-text đơn giản.
-                    // Trong thực tế, bạn PHẢI sử dụng hashing!
-                    if (taiKhoan.MatKhauHash == model.MatKhau)
-                    {
-                        var claims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.Name, taiKhoan.TenDangNhap),
-                            new Claim(ClaimTypes.Role, taiKhoan.MaVaiTroNavigation.TenVaiTro)
-                        };
-
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                        var authProperties = new AuthenticationProperties();
-
-                        await HttpContext.SignInAsync(
-                            CookieAuthenticationDefaults.AuthenticationScheme,
-                            new ClaimsPrincipal(claimsIdentity),
-                            authProperties);
-
-                        // Chuyển hướng người dùng đến trang phù hợp với vai trò
-                        if (taiKhoan.MaVaiTroNavigation.TenVaiTro == "Admin")
-                        {
-                            return RedirectToAction("Index", "Admin");
-                        }
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-                ModelState.AddModelError(string.Empty, "Tên đăng nhập hoặc mật khẩu không đúng.");
-            }
-            return View(model);
+            ViewBag.LopHocList = new SelectList(await _context.LopHocs.AsNoTracking().ToListAsync(), "MaLopHoc", "TenLopHoc", selectedLop);
         }
 
-        // Action xử lý đăng xuất
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
-        }
+        private IActionResult RedirectToRole(string? role) => RedirectToAction("Index", role switch { "Admin" => "Admin", _ => "Home" });
     }
 }

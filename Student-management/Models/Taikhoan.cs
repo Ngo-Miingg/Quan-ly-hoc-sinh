@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿// File: TaiKhoan.cs
 namespace Student_Management.Models;
 
-public partial class Taikhoan
+public partial class TaiKhoan
 {
-    public int MaTk { get; set; }
-
+    public int MaTaiKhoan { get; set; }
     public string TenDangNhap { get; set; } = null!;
-
     public string MatKhau { get; set; } = null!;
-
     public string? VaiTro { get; set; }
+    public int? MaGiaoVien { get; set; }
+    public int? MaHocSinh { get; set; }
 
-    public int? MaGv { get; set; }
-
-    public int? MaHs { get; set; }
-
-
-    public virtual Giaovien? MaGvNavigation { get; set; }
-
-    public virtual Hocsinh? MaHsNavigation { get; set; }
+    // Navigation Properties
+    public virtual GiaoVien? GiaoVien { get; set; }
+    public virtual HocSinh? HocSinh { get; set; }
 }

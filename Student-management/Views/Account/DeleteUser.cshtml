@@ -1,0 +1,22 @@
+﻿@model Student_Management.Models.TaiKhoan
+@{
+    ViewData["Title"] = "Xác nhận Xóa";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h3 class="text-danger">Bạn có chắc chắn muốn xóa tài khoản này không?</h3>
+<div>
+    <h4>Tài khoản: @Model.TenDangNhap</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Người dùng</dt>
+        <dd class="col-sm-9">@(Model.HocSinh?.HoTen ?? Model.GiaoVien?.HoTen)</dd>
+    </dl>
+
+    @* Sửa lại thành form *@
+    <form asp-action="DeleteUser">
+        <input type="hidden" asp-for="MaTaiKhoan" />
+        <input type="submit" value="Xóa vĩnh viễn" class="btn btn-danger" /> |
+        <a asp-action="ListUser">Quay lại Danh sách</a>
+    </form>
+</div>

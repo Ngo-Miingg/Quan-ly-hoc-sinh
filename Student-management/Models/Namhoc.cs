@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿// File: NamHoc.cs
 namespace Student_Management.Models;
 
-public partial class Namhoc
+public partial class NamHoc
 {
     public int MaNamHoc { get; set; }
-
     public string TenNamHoc { get; set; } = null!;
+    public DateTime NgayBatDau { get; set; }
+    public DateTime NgayKetThuc { get; set; }
 
-    public DateOnly NgayBatDau { get; set; }
-
-    public DateOnly NgayKetThuc { get; set; }
-
-    public virtual ICollection<Hocky> Hockies { get; set; } = new List<Hocky>();
-
-    public virtual ICollection<Lop> Lops { get; set; } = new List<Lop>();
+    // Navigation Properties
+    public virtual ICollection<HocKy> HocKys { get; set; } = new List<HocKy>();
+    public virtual ICollection<Lop> LopHocs { get; set; } = new List<Lop>();
 }

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿// File: PhongHoc.cs
 namespace Student_Management.Models;
 
-public partial class Phonghoc
+public partial class PhongHoc
 {
-    public int MaPhong { get; set; }
-
-    public string TenPhong { get; set; } = null!;
-
+    public int MaPhongHoc { get; set; }
+    public string TenPhongHoc { get; set; } = null!;
     public int? SucChua { get; set; }
-
     public string? ViTri { get; set; }
 
-    public virtual ICollection<Lichhoc> Lichhocs { get; set; } = new List<Lichhoc>();
+    // Navigation Properties
+    public virtual ICollection<LichHoc> LichHocs { get; set; } = new List<LichHoc>();
 }

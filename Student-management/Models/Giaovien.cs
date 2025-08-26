@@ -1,33 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿// File: GiaoVien.cs
 namespace Student_Management.Models;
 
-public partial class Giaovien
+public partial class GiaoVien
 {
-    public int MaGv { get; set; }
-
+    public int MaGiaoVien { get; set; }
     public string HoTen { get; set; } = null!;
-
-    public DateOnly? NgaySinh { get; set; }
-
+    public DateTime? NgaySinh { get; set; }
     public string? GioiTinh { get; set; }
-
     public string? DiaChi { get; set; }
-
-    public string? Sdt { get; set; }
-
+    public string? SoDienThoai { get; set; }
     public string? Email { get; set; }
-
     public int? MaMonHoc { get; set; }
 
-    public virtual ICollection<Lichhoc> Lichhocs { get; set; } = new List<Lichhoc>();
-
-    public virtual ICollection<Lop> Lops { get; set; } = new List<Lop>();
-
-    public virtual Monhoc? MaMonHocNavigation { get; set; }
-
-    public virtual ICollection<PhancongGiangday> PhancongGiangdays { get; set; } = new List<PhancongGiangday>();
-
-    public virtual ICollection<Taikhoan> Taikhoans { get; set; } = new List<Taikhoan>();
+    // Navigation Properties
+    public virtual MonHoc? MonHoc { get; set; }
+    public virtual ICollection<LichHoc> LichHocs { get; set; } = new List<LichHoc>();
+    public virtual ICollection<Lop> LopHocs { get; set; } = new List<Lop>();
+    public virtual ICollection<PhanCongGiangDay> PhanCongGiangDays { get; set; } = new List<PhanCongGiangDay>();
+    public virtual ICollection<TaiKhoan> TaiKhoans { get; set; } = new List<TaiKhoan>();
 }

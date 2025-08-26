@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 namespace Student_Management.Models;
-
 public class AuthService
 {
     private readonly QuanLyHocSinhContext _context;
@@ -11,9 +10,9 @@ public class AuthService
         _context = context;
     }
 
-    public async Task<Taikhoan?> AuthenticateAsync(LoginViewModel model)
+    public async Task<TaiKhoan?> AuthenticateAsync(LoginViewModel model)
     {
-        return await _context.Taikhoans
+        return await _context.TaiKhoans
             .FirstOrDefaultAsync(x =>
                 x.TenDangNhap == model.TenDangNhap &&
                 x.MatKhau == model.MatKhau); // TODO: mã hóa sau

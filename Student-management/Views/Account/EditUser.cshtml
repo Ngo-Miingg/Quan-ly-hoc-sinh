@@ -1,0 +1,39 @@
+﻿@model EditUserViewModel
+@{
+    ViewData["Title"] = "Chỉnh sửa Người dùng";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h4>Tài khoản: @Model.TenDangNhap</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="EditUser">
+            <input type="hidden" asp-for="MaTaiKhoan" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @* Tương tự form CreateUser, nhưng các ô input sẽ được điền sẵn giá trị *@
+            @* Ví dụ: *@
+            <div class="col-md-6 mb-3">
+                <label asp-for="HoTen" class="form-label"></label>
+                <input asp-for="HoTen" class="form-control" />
+                <span asp-validation-for="HoTen" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="MatKhauMoi" class="form-label"></label>
+                <input asp-for="MatKhauMoi" class="form-control" type="password" />
+                <span asp-validation-for="MatKhauMoi" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Lưu thay đổi" class="btn btn-primary" />
+                <a asp-action="ListUser" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @* JavaScript ẩn hiện dropdown lớp học tương tự CreateUser.cshtml *@
+}

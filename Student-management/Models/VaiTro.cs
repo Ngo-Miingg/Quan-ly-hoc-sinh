@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Student_management.Models;
+namespace Student_Management.Models;
 
 public partial class VaiTro
 {

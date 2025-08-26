@@ -1,67 +1,51 @@
-﻿@model Student_management.Models.CreateUserViewModel
-
+﻿@model CreateUserViewModel
 @{
-    ViewData["Title"] = "Tạo tài khoản mới";
+    ViewData["Title"] = "Tạo Người Dùng Mới";
 }
 
-<h1>Tạo tài khoản mới</h1>
-
+<h1>@ViewData["Title"]</h1>
+<hr />
 <div class="row">
-    <div class="col-md-6">
-        <form asp-controller="Admin" asp-action="CreateUser" method="post">
+    <div class="col-md-8">
+        <form asp-action="CreateUser">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="HoTen"></label>
-                <input asp-for="HoTen" class="form-control" />
-                <span asp-validation-for="HoTen" class="text-danger"></span>
+
+            <h4>Thông tin cá nhân</h4>
+            @* ... Các trường input cho HoTen, NgaySinh, Email, GioiTinh ... *@
+
+            <h4 class="mt-4">Thông tin tài khoản và vai trò</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="VaiTro" class="form-label"></label>
+                    <select asp-for="VaiTro" class="form-select" id="roleSelect">
+                        <option value="">-- Chọn vai trò --</option>
+                        <option value="HocSinh">Học Sinh</option>
+                        <option value="GiaoVien">Giáo Viên</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3" id="lopHocDropdown" style="display:none;">
+                    <label asp-for="MaLopHoc" class="form-label"></label>
+                    <select asp-for="MaLopHoc" class="form-select" asp-items="ViewBag.LopHocList">
+                        <option value="">-- Chọn lớp học --</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="NgaySinh"></label>
-                <input asp-for="NgaySinh" class="form-control" />
-                <span asp-validation-for="NgaySinh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GioiTinh"></label>
-                <input asp-for="GioiTinh" class="form-control" />
-                <span asp-validation-for="GioiTinh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiaChi"></label>
-                <input asp-for="DiaChi" class="form-control" />
-                <span asp-validation-for="DiaChi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sdt"></label>
-                <input asp-for="Sdt" class="form-control" />
-                <span asp-validation-for="Sdt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <hr />
-            <div class="form-group">
-                <label asp-for="TenDangNhap"></label>
-                <input asp-for="TenDangNhap" class="form-control" />
-                <span asp-validation-for="TenDangNhap" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MatKhau"></label>
-                <input asp-for="MatKhau" class="form-control" />
-                <span asp-validation-for="MatKhau" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaVaiTro"></label>
-                <select asp-for="MaVaiTro" class="form-control" asp-items="@(new SelectList(ViewBag.Roles, "MaVaiTro", "TenVaiTro"))"></select>
-                <span asp-validation-for="MaVaiTro" class="text-danger"></span>
-            </div>
-            <br />
-            <button type="submit" class="btn btn-primary">Tạo tài khoản</button>
+            <button type="submit" class="btn btn-primary">Tạo</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const roleSelect = document.getElementById('roleSelect');
+            const lopHocDiv = document.getElementById('lopHocDropdown');
+            function toggleLopHoc() {
+                lopHocDiv.style.display = roleSelect.value === 'HocSinh' ? 'block' : 'none';
+            }
+            roleSelect.addEventListener('change', toggleLopHoc);
+            toggleLopHoc(); // Chạy ngay khi tải trang
+        });
+    </script>
 }

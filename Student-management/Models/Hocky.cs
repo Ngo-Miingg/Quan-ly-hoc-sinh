@@ -1,27 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿// File: HocKy.cs
 namespace Student_Management.Models;
 
-public partial class Hocky
+public partial class HocKy
 {
-    public int MaHk { get; set; }
-
-    public string TenHk { get; set; } = null!;
-
-    public DateOnly NgayBatDau { get; set; }
-
-    public DateOnly NgayKetThuc { get; set; }
-
+    public int MaHocKy { get; set; }
+    public string TenHocKy { get; set; } = null!;
+    public DateTime NgayBatDau { get; set; }
+    public DateTime NgayKetThuc { get; set; }
     public int MaNamHoc { get; set; }
 
-    public virtual ICollection<Diem> Diems { get; set; } = new List<Diem>();
-
-    public virtual ICollection<Hocphi> Hocphis { get; set; } = new List<Hocphi>();
-
-    public virtual ICollection<Lichhoc> Lichhocs { get; set; } = new List<Lichhoc>();
-
-    public virtual Namhoc MaNamHocNavigation { get; set; } = null!;
-
-    public virtual ICollection<PhancongGiangday> PhancongGiangdays { get; set; } = new List<PhancongGiangday>();
+    // Navigation Properties
+    public virtual NamHoc NamHoc { get; set; } = null!;
+    public virtual ICollection<Diem> DiemSos { get; set; } = new List<Diem>();
+    public virtual ICollection<HocPhi> HocPhis { get; set; } = new List<HocPhi>();
+    public virtual ICollection<LichHoc> LichHocs { get; set; } = new List<LichHoc>();
+    public virtual ICollection<PhanCongGiangDay> PhanCongGiangDays { get; set; } = new List<PhanCongGiangDay>();
 }

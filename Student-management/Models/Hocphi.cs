@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿// File: HocPhi.cs
 namespace Student_Management.Models;
 
-public partial class Hocphi
+public partial class HocPhi
 {
-    public int MaHp { get; set; }
-
-    public int MaHs { get; set; }
-
+    public int MaHocPhi { get; set; }
+    public int MaHocSinh { get; set; }
     public decimal? SoTien { get; set; }
-
-    public DateOnly? NgayDong { get; set; }
-
+    public DateTime? NgayDong { get; set; }
     public string? TrangThai { get; set; }
+    public int MaHocKy { get; set; }
 
-    public int MaHk { get; set; }
-
-    public virtual Hocky MaHkNavigation { get; set; } = null!;
-
-    public virtual Hocsinh MaHsNavigation { get; set; } = null!;
+    // Navigation Properties
+    public virtual HocKy HocKy { get; set; } = null!;
+    public virtual HocSinh HocSinh { get; set; } = null!;
 }

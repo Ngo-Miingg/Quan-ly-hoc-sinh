@@ -1,13 +1,82 @@
 ﻿@{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "Trang Quản Trị";
 }
 
-<h2>Chào mừng, Admin!</h2>
-<p>Đây là trang quản trị hệ thống.</p>
+<h1 class="display-4">@ViewData["Title"]</h1>
+<p class="lead">Chào mừng bạn đến với hệ thống quản lý học sinh.</p>
+<hr />
 
-<ul>
-    <li><a asp-controller="GiaoVien" asp-action="Index">Quản lý Giáo viên</a></li>
-    <li><a asp-controller="HocSinh" asp-action="Index">Quản lý Học sinh</a></li>
-    <li><a asp-controller="Lop" asp-action="Index">Quản lý Lớp</a></li>
-    <li><a asp-controller="MonHoc" asp-action="Index">Quản lý Môn học</a></li>
-</ul>
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <h5 class="card-title">Học Sinh</h5>
+                <p class="card-text fs-4">@ViewBag.TongHocSinh</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <h5 class="card-title">Giáo Viên</h5>
+                <p class="card-text fs-4">@ViewBag.TongGiaoVien</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info h-100">
+            <div class="card-body">
+                <h5 class="card-title">Lớp Học</h5>
+                <p class="card-text fs-4">@ViewBag.TongLop</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-secondary h-100">
+            <div class="card-body">
+                <h5 class="card-title">Tài Khoản</h5>
+                <p class="card-text fs-4">@ViewBag.TongTaiKhoan</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="mt-5">Chức năng quản lý</h2>
+<div class="row g-4">
+    <div class="col-md-4">
+    <div class="card h-100">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Quản lý Tài khoản</h5>
+            <p class="card-text">Tạo tài khoản mới cho giáo viên, học sinh và xem danh sách tất cả người dùng trong hệ thống.</p>
+            <div class="mt-auto">
+                @* SỬA LẠI asp-controller="Account" *@
+                <a asp-controller="Account" asp-action="CreateUser" class="btn btn-primary">Tạo tài khoản</a>
+                <a asp-controller="Account" asp-action="ListUser" class="btn btn-outline-secondary">Xem danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Quản lý Nhân sự</h5>
+                <p class="card-text">Xem và quản lý thông tin chi tiết của tất cả học sinh và giáo viên trong trường.</p>
+                <div class="mt-auto">
+                    <a asp-controller="Admin" asp-action="DanhSachHocSinh" class="btn btn-primary">Quản lý Học sinh</a>
+                    <a asp-controller="Admin" asp-action="DanhSachGiaoVien" class="btn btn-outline-secondary">Quản lý Giáo viên</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Quản lý Lớp học</h5>
+                <p class="card-text">Xem danh sách, tạo mới, sửa, xóa và phân công giáo viên chủ nhiệm cho các lớp học.</p>
+                <div class="mt-auto">
+                    <a asp-controller="LopHoc" asp-action="Index" class="btn btn-primary">Bắt đầu Quản lý</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

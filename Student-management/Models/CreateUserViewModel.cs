@@ -1,50 +1,44 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-
-namespace Student_management.Models;
+namespace Student_Management.Models;
 
 public class CreateUserViewModel
 {
-    [Required]
+    [Required(ErrorMessage = "Họ tên là bắt buộc.")]
     [Display(Name = "Họ và tên")]
-    public string HoTen { get; set; } = string.Empty;
+    public string HoTen { get; set; }
 
-    [Required]
-    [Display(Name = "Ngày sinh")]
+    [Required(ErrorMessage = "Ngày sinh là bắt buộc.")]
     [DataType(DataType.Date)]
+    [Display(Name = "Ngày sinh")]
     public DateTime NgaySinh { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Giới tính là bắt buộc.")]
     [Display(Name = "Giới tính")]
-    public string GioiTinh { get; set; } = string.Empty;
+    public string GioiTinh { get; set; }
 
-    [Required]
-    [Display(Name = "Địa chỉ")]
-    public string DiaChi { get; set; } = string.Empty;
+    [Required(ErrorMessage = "Email là bắt buộc.")]
+    [EmailAddress(ErrorMessage = "Email không hợp lệ.")]
+    public string Email { get; set; }
 
-    [Required]
     [Display(Name = "Số điện thoại")]
-    [RegularExpression(@"^(\d{10})$", ErrorMessage = "Số điện thoại không hợp lệ.")]
-    public string Sdt { get; set; } = string.Empty;
+    public string? SoDienThoai { get; set; }
 
-    [Required]
-    [EmailAddress]
-    public string Email { get; set; } = string.Empty;
+    [Display(Name = "Địa chỉ")]
+    public string? DiaChi { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Tên đăng nhập là bắt buộc.")]
     [Display(Name = "Tên đăng nhập")]
-    public string TenDangNhap { get; set; } = string.Empty;
+    public string TenDangNhap { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Mật khẩu là bắt buộc.")]
     [DataType(DataType.Password)]
     [Display(Name = "Mật khẩu")]
-    public string MatKhau { get; set; } = string.Empty;
+    public string MatKhau { get; set; }
 
-    [Required]
-    [DisplayName("Vai trò")]
-    public int MaVaiTro { get; set; }
+    [Required(ErrorMessage = "Vui lòng chọn vai trò.")]
+    [Display(Name = "Vai trò")]
+    public string VaiTro { get; set; }
 
-    // Thông tin dành riêng cho Học sinh
-    [DisplayName("Lớp học")]
-    public int? MaLop { get; set; }
+    [Display(Name = "Lớp học")]
+    public int? MaLopHoc { get; set; }
 }

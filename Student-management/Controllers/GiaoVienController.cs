@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Student_Management.Controllers
 {
-    [Authorize(Roles = "GiaoVien")]
+    // [Authorize(Roles = "Admin")] // Thông thường Admin sẽ quản lý giáo viên
     public class GiaoVienController : Controller
     {
         private readonly QuanLyHocSinhContext _context;
@@ -20,9 +20,10 @@ namespace Student_Management.Controllers
         // GET: GiaoVien
         public async Task<IActionResult> Index()
         {
-            var giaoViens = await _context.Giaoviens
-                .Include(g => g.MaMonHocNavigation)
-                .Include(g => g.Lops)
+            // Sử dụng DbSet và navigation property đã chuẩn hóa
+            var giaoViens = await _context.GiaoViens
+                .Include(g => g.MonHoc)
+                .Include(g => g.LopHocs) // Các lớp mà giáo viên này chủ nhiệm
                 .ToListAsync();
 
             return View(giaoViens);
@@ -33,52 +34,43 @@ namespace Student_Management.Controllers
         {
             if (id == null) return NotFound();
 
-            var giaovien = await _context.Giaoviens
-                .Include(g => g.MaMonHocNavigation)
-                .Include(g => g.Lops)
-                .Include(g => g.Lichhocs).ThenInclude(l => l.MaMonHocNavigation)
-                .Include(g => g.Lichhocs).ThenInclude(l => l.MaLopNavigation)
-                .Include(g => g.PhancongGiangdays).ThenInclude(p => p.MaLopNavigation)
-                .FirstOrDefaultAsync(m => m.MaGv == id);
+            var giaoVien = await _context.GiaoViens
+                .Include(g => g.MonHoc)
+                .Include(g => g.LopHocs)
+                .Include(g => g.LichHocs).ThenInclude(l => l.MonHoc)
+                .Include(g => g.LichHocs).ThenInclude(l => l.LopHoc)
+                .Include(g => g.PhanCongGiangDays).ThenInclude(p => p.LopHoc)
+                .FirstOrDefaultAsync(m => m.MaGiaoVien == id); // Sửa tên PK
 
-            if (giaovien == null) return NotFound();
+            if (giaoVien == null) return NotFound();
 
-            return View(giaovien);
+            return View(giaoVien);
         }
 
         // GET: GiaoVien/Create
         public IActionResult Create()
         {
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
-                foreach (var error in errors)
-                {
-                    Console.WriteLine(error.ErrorMessage); // Xem trong Output của VS
-                }
-            }
-
-            LoadDropdowns();   // nạp danh sách Môn học và Lớp
+            LoadDropdowns();
             return View();
         }
 
         // POST: GiaoVien/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Giaovien giaovien, int? LopChuNhiemId)
+        public async Task<IActionResult> Create(GiaoVien giaoVien, int? maLopHocChuNhiem)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(giaovien);
-                await _context.SaveChangesAsync();
+                _context.Add(giaoVien);
+                await _context.SaveChangesAsync(); // Lưu để lấy được MaGiaoVien mới
 
-                if (LopChuNhiemId.HasValue)
+                if (maLopHocChuNhiem.HasValue)
                 {
-                    var lop = await _context.Lops.FindAsync(LopChuNhiemId.Value);
-                    if (lop != null)
+                    var lopHoc = await _context.LopHocs.FindAsync(maLopHocChuNhiem.Value);
+                    if (lopHoc != null)
                     {
-                        lop.MaGvcn = giaovien.MaGv;
-                        _context.Update(lop);
+                        lopHoc.MaGiaoVienChuNhiem = giaoVien.MaGiaoVien;
+                        _context.Update(lopHoc);
                         await _context.SaveChangesAsync();
                     }
                 }
@@ -86,7 +78,7 @@ namespace Student_Management.Controllers
                 return RedirectToAction(nameof(Index));
             }
             LoadDropdowns();
-            return View(giaovien);
+            return View(giaoVien);
         }
 
         // GET: GiaoVien/Edit/5
@@ -94,46 +86,48 @@ namespace Student_Management.Controllers
         {
             if (id == null) return NotFound();
 
-            var giaovien = await _context.Giaoviens
-                .Include(g => g.Lops)
-                .FirstOrDefaultAsync(g => g.MaGv == id);
+            var giaoVien = await _context.GiaoViens
+                .Include(g => g.LopHocs)
+                .FirstOrDefaultAsync(g => g.MaGiaoVien == id);
 
-            if (giaovien == null) return NotFound();
+            if (giaoVien == null) return NotFound();
 
-            var lopChuNhiem = await _context.Lops.FirstOrDefaultAsync(l => l.MaGvcn == giaovien.MaGv);
-            ViewBag.LopChuNhiemId = lopChuNhiem?.MaLop;
+            var lopChuNhiem = await _context.LopHocs.FirstOrDefaultAsync(l => l.MaGiaoVienChuNhiem == giaoVien.MaGiaoVien);
+            ViewBag.MaLopHocChuNhiem = lopChuNhiem?.MaLopHoc;
 
             LoadDropdowns();
-            return View(giaovien);
+            return View(giaoVien);
         }
 
         // POST: GiaoVien/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Giaovien giaovien, int? LopChuNhiemId)
+        public async Task<IActionResult> Edit(int id, GiaoVien giaoVien, int? maLopHocChuNhiem)
         {
-            if (id != giaovien.MaGv) return NotFound();
+            if (id != giaoVien.MaGiaoVien) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(giaovien);
-                    await _context.SaveChangesAsync();
+                    // 1. Cập nhật thông tin cơ bản của giáo viên
+                    _context.Update(giaoVien);
 
-                    // Clear lớp cũ
-                    var oldLops = _context.Lops.Where(l => l.MaGvcn == giaovien.MaGv);
-                    foreach (var lop in oldLops)
+                    // 2. Xóa vai trò chủ nhiệm ở lớp cũ (nếu có)
+                    var lopChuNhiemCu = await _context.LopHocs
+                        .FirstOrDefaultAsync(l => l.MaGiaoVienChuNhiem == giaoVien.MaGiaoVien);
+                    if (lopChuNhiemCu != null)
                     {
-                        lop.MaGvcn = null;
+                        lopChuNhiemCu.MaGiaoVienChuNhiem = null;
                     }
 
-                    if (LopChuNhiemId.HasValue)
+                    // 3. Gán vai trò chủ nhiệm cho lớp mới (nếu có chọn)
+                    if (maLopHocChuNhiem.HasValue)
                     {
-                        var lop = await _context.Lops.FindAsync(LopChuNhiemId.Value);
-                        if (lop != null)
+                        var lopHocMoi = await _context.LopHocs.FindAsync(maLopHocChuNhiem.Value);
+                        if (lopHocMoi != null)
                         {
-                            lop.MaGvcn = giaovien.MaGv;
+                            lopHocMoi.MaGiaoVienChuNhiem = giaoVien.MaGiaoVien;
                         }
                     }
 
@@ -141,14 +135,14 @@ namespace Student_Management.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Giaoviens.Any(e => e.MaGv == giaovien.MaGv))
+                    if (!_context.GiaoViens.Any(e => e.MaGiaoVien == giaoVien.MaGiaoVien))
                         return NotFound();
                     else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
             LoadDropdowns();
-            return View(giaovien);
+            return View(giaoVien);
         }
 
         // GET: GiaoVien/Delete/5
@@ -156,16 +150,14 @@ namespace Student_Management.Controllers
         {
             if (id == null) return NotFound();
 
-            var giaovien = await _context.Giaoviens
-                .Include(g => g.MaMonHocNavigation)
-                .Include(g => g.Lops)
-                .Include(g => g.Lichhocs).ThenInclude(l => l.MaMonHocNavigation)
-                .Include(g => g.Lichhocs).ThenInclude(l => l.MaLopNavigation)
-                .FirstOrDefaultAsync(m => m.MaGv == id);
+            var giaoVien = await _context.GiaoViens
+                .Include(g => g.MonHoc)
+                .Include(g => g.LopHocs)
+                .FirstOrDefaultAsync(m => m.MaGiaoVien == id);
 
-            if (giaovien == null) return NotFound();
+            if (giaoVien == null) return NotFound();
 
-            return View(giaovien);
+            return View(giaoVien);
         }
 
         // POST: GiaoVien/Delete/5
@@ -173,46 +165,40 @@ namespace Student_Management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var giaovien = await _context.Giaoviens
-                .Include(g => g.Lops)
-                .Include(g => g.Lichhocs)
-                .Include(g => g.PhancongGiangdays)
-                .FirstOrDefaultAsync(g => g.MaGv == id);
+            var giaoVien = await _context.GiaoViens.FindAsync(id);
 
-            if (giaovien != null)
+            if (giaoVien != null)
             {
+                // Vì DbContext có ràng buộc Restrict, ta phải xử lý các phụ thuộc trước khi xóa
                 // 1. Bỏ liên kết lớp chủ nhiệm
-                foreach (var lop in giaovien.Lops)
+                var lopChuNhiem = await _context.LopHocs.FirstOrDefaultAsync(l => l.MaGiaoVienChuNhiem == id);
+                if (lopChuNhiem != null)
                 {
-                    lop.MaGvcn = null;
+                    lopChuNhiem.MaGiaoVienChuNhiem = null;
                 }
 
-                // 2. Xóa lịch học liên quan
-                foreach (var lich in giaovien.Lichhocs.ToList())
-                {
-                    _context.Lichhocs.Remove(lich);
-                }
+                // 2. Xóa các lịch học và phân công giảng dạy liên quan
+                var lichHocs = await _context.LichHocs.Where(l => l.MaGiaoVien == id).ToListAsync();
+                _context.LichHocs.RemoveRange(lichHocs);
 
-                // 3. Xóa phân công giảng dạy liên quan
-                foreach (var pc in giaovien.PhancongGiangdays.ToList())
-                {
-                    _context.PhancongGiangdays.Remove(pc);
-                }
+                var phanCongs = await _context.PhanCongGiangDays.Where(p => p.MaGiaoVien == id).ToListAsync();
+                _context.PhanCongGiangDays.RemoveRange(phanCongs);
 
-                // 4. Xóa giáo viên
-                _context.Giaoviens.Remove(giaovien);
+                // Lưu các thay đổi phụ thuộc
+                await _context.SaveChangesAsync();
 
+                // 3. Xóa giáo viên
+                _context.GiaoViens.Remove(giaoVien);
                 await _context.SaveChangesAsync();
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-
         private void LoadDropdowns()
         {
-            ViewBag.MonHocList = _context.Monhocs.ToList();
-            ViewBag.LopList = _context.Lops.ToList();
+            ViewBag.MonHocList = _context.MonHocs.ToList();
+            ViewBag.LopHocList = _context.LopHocs.ToList();
         }
     }
 }

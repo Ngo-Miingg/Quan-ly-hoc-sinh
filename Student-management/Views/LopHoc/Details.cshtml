@@ -1,0 +1,50 @@
+﻿@model Student_Management.Models.Lop
+@{
+    ViewData["Title"] = "Trung tâm Quản lý Lớp học";
+}
+
+<h1>Lớp: @Model.TenLopHoc</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header"><h4>Danh sách học sinh (@Model.HocSinhs.Count)</h4></div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tbody>
+                        @foreach (var hs in Model.HocSinhs)
+                        {
+                            <tr>
+                                <td>@hs.HoTen</td>
+                                <td>
+                                    <form asp-action="RemoveStudentFromClass" method="post" class="d-inline">
+                                        <input type="hidden" name="maHocSinh" value="@hs.MaHocSinh" />
+                                        <input type="hidden" name="maLopHoc" value="@Model.MaLopHoc" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Xóa khỏi lớp</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header"><h4>Thêm học sinh vào lớp</h4></div>
+            <div class="card-body">
+                <form asp-action="AddStudentToClass" method="post">
+                    <input type="hidden" name="maLopHoc" value="@Model.MaLopHoc" />
+                    <div class="mb-3">
+                        <label class="form-label">Chọn học sinh chưa có lớp:</label>
+                        <select name="maHocSinh" class="form-select" asp-items="ViewBag.AvailableStudents"></select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm vào lớp</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div><a asp-action="Index">Quay lại danh sách</a></div>

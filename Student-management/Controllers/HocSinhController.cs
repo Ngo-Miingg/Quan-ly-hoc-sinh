@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace Student_Management.Controllers
 {
-    [Authorize(Roles = "HocSinh")]
+    // [Authorize(Roles = "HocSinh")] <-- Phân quyền này không hợp lý
+    // Thay đổi: Chỉ Admin hoặc Giáo viên mới có quyền quản lý danh sách học sinh.
+    [Authorize(Roles = "Admin, GiaoVien")]
     public class HocSinhController : Controller
     {
         private readonly QuanLyHocSinhContext _context;
@@ -18,53 +20,54 @@ namespace Student_Management.Controllers
             _context = context;
         }
 
-        // GET: HocSinh (chọn lớp)
+        // GET: HocSinh (Hiển thị danh sách các lớp học)
         public async Task<IActionResult> Index()
         {
-            var lopList = await _context.Lops
-                .Include(l => l.MaGvcnNavigation) // giáo viên chủ nhiệm
-                .Include(l => l.MaNamHocNavigation)
+            var dsLopHoc = await _context.LopHocs
+                .Include(l => l.GiaoVienChuNhiem) // Sửa navigation property
+                .Include(l => l.NamHoc)           // Sửa navigation property
                 .ToListAsync();
 
-            return View(lopList);
+            return View(dsLopHoc);
         }
 
-        // GET: HocSinh/ByClass/5
+        // GET: HocSinh/ByClass/5 (Hiển thị danh sách học sinh theo lớp)
         public async Task<IActionResult> ByClass(int? id)
         {
             if (id == null) return NotFound();
 
-            var lop = await _context.Lops
-                .Include(l => l.Hocsinhs)
-                .Include(l => l.MaGvcnNavigation)
-                .FirstOrDefaultAsync(l => l.MaLop == id);
+            var lopHoc = await _context.LopHocs
+                .Include(l => l.HocSinhs)           // Sửa navigation property
+                .Include(l => l.GiaoVienChuNhiem) // Sửa navigation property
+                .FirstOrDefaultAsync(l => l.MaLopHoc == id); // Sửa tên PK
 
-            if (lop == null) return NotFound();
+            if (lopHoc == null) return NotFound();
 
-            return View(lop);
+            return View(lopHoc);
         }
 
         // GET: HocSinh/Create
         public IActionResult Create(int? lopId)
         {
-            ViewBag.LopList = new SelectList(_context.Lops, "MaLop", "TenLop", lopId);
+            // Sửa DbSet và các thuộc tính khóa
+            ViewBag.LopHocList = new SelectList(_context.LopHocs, "MaLopHoc", "TenLopHoc", lopId);
             return View();
         }
 
         // POST: HocSinh/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Hocsinh hocsinh)
+        public async Task<IActionResult> Create(HocSinh hocSinh) // Sửa tên Model
         {
             if (ModelState.IsValid)
             {
-                _context.Add(hocsinh);
+                _context.Add(hocSinh);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(ByClass), new { id = hocsinh.MaLop });
+                return RedirectToAction(nameof(ByClass), new { id = hocSinh.MaLopHoc });
             }
 
-            ViewBag.LopList = new SelectList(_context.Lops, "MaLop", "TenLop", hocsinh.MaLop);
-            return View(hocsinh);
+            ViewBag.LopHocList = new SelectList(_context.LopHocs, "MaLopHoc", "TenLopHoc", hocSinh.MaLopHoc);
+            return View(hocSinh);
         }
 
         // GET: HocSinh/Edit/5
@@ -72,36 +75,36 @@ namespace Student_Management.Controllers
         {
             if (id == null) return NotFound();
 
-            var hocsinh = await _context.Hocsinhs.FindAsync(id);
-            if (hocsinh == null) return NotFound();
+            var hocSinh = await _context.HocSinhs.FindAsync(id);
+            if (hocSinh == null) return NotFound();
 
-            ViewBag.LopList = new SelectList(_context.Lops, "MaLop", "TenLop", hocsinh.MaLop);
-            return View(hocsinh);
+            ViewBag.LopHocList = new SelectList(_context.LopHocs, "MaLopHoc", "TenLopHoc", hocSinh.MaLopHoc);
+            return View(hocSinh);
         }
 
         // POST: HocSinh/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Hocsinh hocsinh)
+        public async Task<IActionResult> Edit(int id, HocSinh hocSinh)
         {
-            if (id != hocsinh.MaHs) return NotFound();
+            if (id != hocSinh.MaHocSinh) return NotFound(); // Sửa tên PK
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(hocsinh);
+                    _context.Update(hocSinh);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(ByClass), new { id = hocsinh.MaLop });
+                    return RedirectToAction(nameof(ByClass), new { id = hocSinh.MaLopHoc });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Hocsinhs.Any(e => e.MaHs == hocsinh.MaHs)) return NotFound();
+                    if (!_context.HocSinhs.Any(e => e.MaHocSinh == hocSinh.MaHocSinh)) return NotFound();
                     else throw;
                 }
             }
-            ViewBag.LopList = new SelectList(_context.Lops, "MaLop", "TenLop", hocsinh.MaLop);
-            return View(hocsinh);
+            ViewBag.LopHocList = new SelectList(_context.LopHocs, "MaLopHoc", "TenLopHoc", hocSinh.MaLopHoc);
+            return View(hocSinh);
         }
 
         // GET: HocSinh/Details/5
@@ -109,12 +112,12 @@ namespace Student_Management.Controllers
         {
             if (id == null) return NotFound();
 
-            var hocsinh = await _context.Hocsinhs
-                .Include(h => h.MaLopNavigation)
-                .FirstOrDefaultAsync(m => m.MaHs == id);
+            var hocSinh = await _context.HocSinhs
+                .Include(h => h.LopHoc) // Sửa navigation property
+                .FirstOrDefaultAsync(m => m.MaHocSinh == id); // Sửa tên PK
 
-            if (hocsinh == null) return NotFound();
-            return View(hocsinh);
+            if (hocSinh == null) return NotFound();
+            return View(hocSinh);
         }
 
         // GET: HocSinh/Delete/5
@@ -122,12 +125,12 @@ namespace Student_Management.Controllers
         {
             if (id == null) return NotFound();
 
-            var hocsinh = await _context.Hocsinhs
-                .Include(h => h.MaLopNavigation)
-                .FirstOrDefaultAsync(m => m.MaHs == id);
+            var hocSinh = await _context.HocSinhs
+                .Include(h => h.LopHoc) // Sửa navigation property
+                .FirstOrDefaultAsync(m => m.MaHocSinh == id); // Sửa tên PK
 
-            if (hocsinh == null) return NotFound();
-            return View(hocsinh);
+            if (hocSinh == null) return NotFound();
+            return View(hocSinh);
         }
 
         // POST: HocSinh/Delete/5
@@ -135,13 +138,13 @@ namespace Student_Management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var hocsinh = await _context.Hocsinhs.FindAsync(id);
-            if (hocsinh != null)
+            var hocSinh = await _context.HocSinhs.FindAsync(id);
+            if (hocSinh != null)
             {
-                int lopId = hocsinh.MaLop;
-                _context.Hocsinhs.Remove(hocsinh);
+                int maLopHoc = hocSinh.MaLopHoc;
+                _context.HocSinhs.Remove(hocSinh);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(ByClass), new { id = lopId });
+                return RedirectToAction(nameof(ByClass), new { id = maLopHoc });
             }
             return NotFound();
         }

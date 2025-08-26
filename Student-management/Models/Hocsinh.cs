@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-
-
+﻿// File: HocSinh.cs
+// Tên class và các thuộc tính đã được chuẩn hóa PascalCase
 namespace Student_Management.Models;
 
-public partial class Hocsinh
+public partial class HocSinh
 {
-    public int MaHs { get; set; }
+    public int MaHocSinh { get; set; }
     public string HoTen { get; set; } = null!;
     public DateTime? NgaySinh { get; set; }
     public string? GioiTinh { get; set; }
     public string? Email { get; set; }
-    public string? Sdt { get; set; }
+    public string? SoDienThoai { get; set; }
     public string? TrangThai { get; set; }
-    public string? DiaChi { get; set; }   
-    public int MaLop { get; set; }
+    public string? DiaChi { get; set; }
+    public int MaLopHoc { get; set; }
 
-
-
-    public virtual ICollection<Diem> Diems { get; set; } = new List<Diem>();
-
-    public virtual ICollection<Hocphi> Hocphis { get; set; } = new List<Hocphi>();
-
-    public virtual Lop MaLopNavigation { get; set; } = null!;
-
-    public virtual ICollection<Taikhoan> Taikhoans { get; set; } = new List<Taikhoan>();
+    // Navigation Properties
+    public virtual Lop LopHoc { get; set; } = null!;
+    public virtual ICollection<Diem> DiemSos { get; set; } = new List<Diem>();
+    public virtual ICollection<HocPhi> HocPhis { get; set; } = new List<HocPhi>();
+    public virtual ICollection<TaiKhoan> TaiKhoans { get; set; } = new List<TaiKhoan>();
 }
