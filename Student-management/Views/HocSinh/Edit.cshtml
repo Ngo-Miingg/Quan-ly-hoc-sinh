@@ -1,0 +1,53 @@
+﻿@model Student_Management.Models.HocSinh
+
+@{
+    ViewData["Title"] = "Chỉnh sửa thông tin Học sinh";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h4>Học sinh: @Model.HoTen</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form asp-action="Edit">
+                    @* Trường ẩn này rất quan trọng để gửi lại ID của học sinh đang sửa *@
+                    <input type="hidden" asp-for="MaHocSinh" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="HoTen" class="form-label"></label>
+                        <input asp-for="HoTen" class="form-control" />
+                        <span asp-validation-for="HoTen" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="NgaySinh" class="form-label"></label>
+                        <input asp-for="NgaySinh" class="form-control" type="date" />
+                        <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="GioiTinh" class="form-label"></label>
+                        <input asp-for="GioiTinh" class="form-control" />
+                        <span asp-validation-for="GioiTinh" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="MaLopHoc" class="control-label">Lớp</label>
+                        <select asp-for="MaLopHoc" class="form-control" asp-items="ViewBag.LopHocList"></select>
+                        <span asp-validation-for="MaLopHoc" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <input type="submit" value="Lưu" class="btn btn-primary" />
+                        <a asp-action="ByClass" asp-route-id="@Model.MaLopHoc" class="btn btn-secondary">Quay lại</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

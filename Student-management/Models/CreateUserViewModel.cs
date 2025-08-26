@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 namespace Student_Management.Models;
 
 public class CreateUserViewModel
 {
+    // Khởi tạo giá trị mặc định để loại bỏ cảnh báo null
     [Required(ErrorMessage = "Họ tên là bắt buộc.")]
     [Display(Name = "Họ và tên")]
-    public string HoTen { get; set; }
+    public string HoTen { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Ngày sinh là bắt buộc.")]
     [DataType(DataType.Date)]
@@ -14,30 +16,16 @@ public class CreateUserViewModel
 
     [Required(ErrorMessage = "Giới tính là bắt buộc.")]
     [Display(Name = "Giới tính")]
-    public string GioiTinh { get; set; }
+    public string GioiTinh { get; set; } = string.Empty;
 
+    // ... làm tương tự cho các thuộc tính string khác ...
     [Required(ErrorMessage = "Email là bắt buộc.")]
-    [EmailAddress(ErrorMessage = "Email không hợp lệ.")]
-    public string Email { get; set; }
-
-    [Display(Name = "Số điện thoại")]
+    public string Email { get; set; } = string.Empty;
     public string? SoDienThoai { get; set; }
-
-    [Display(Name = "Địa chỉ")]
     public string? DiaChi { get; set; }
-
-    [Required(ErrorMessage = "Tên đăng nhập là bắt buộc.")]
-    [Display(Name = "Tên đăng nhập")]
-    public string TenDangNhap { get; set; }
-
-    [Required(ErrorMessage = "Mật khẩu là bắt buộc.")]
-    [DataType(DataType.Password)]
-    [Display(Name = "Mật khẩu")]
-    public string MatKhau { get; set; }
-
-    [Required(ErrorMessage = "Vui lòng chọn vai trò.")]
-    [Display(Name = "Vai trò")]
-    public string VaiTro { get; set; }
+    public string TenDangNhap { get; set; } = string.Empty;
+    public string MatKhau { get; set; } = string.Empty;
+    public string VaiTro { get; set; } = string.Empty;
 
     [Display(Name = "Lớp học")]
     public int? MaLopHoc { get; set; }

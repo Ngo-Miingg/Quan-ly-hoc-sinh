@@ -10,20 +10,33 @@
     <div class="col-md-8">
         <form asp-action="EditUser">
             <input type="hidden" asp-for="MaTaiKhoan" />
+            <input type="hidden" asp-for="VaiTro" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            @* Tương tự form CreateUser, nhưng các ô input sẽ được điền sẵn giá trị *@
-            @* Ví dụ: *@
-            <div class="col-md-6 mb-3">
-                <label asp-for="HoTen" class="form-label"></label>
-                <input asp-for="HoTen" class="form-control" />
-                <span asp-validation-for="HoTen" class="text-danger"></span>
+            <h4>Thông tin cá nhân</h4>
+            @* Các trường thông tin cá nhân tương tự form CreateUser *@
+
+            <h4 class="mt-4">Thông tin tài khoản</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="TenDangNhap" class="form-label"></label>
+                    <input asp-for="TenDangNhap" class="form-control" />
+                    <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="MatKhauMoi" class="form-label"></label>
+                    <input asp-for="MatKhauMoi" class="form-control" type="password" />
+                    <span asp-validation-for="MatKhauMoi" class="text-danger"></span>
+                </div>
             </div>
-            <div class="col-md-6 mb-3">
-                <label asp-for="MatKhauMoi" class="form-label"></label>
-                <input asp-for="MatKhauMoi" class="form-control" type="password" />
-                <span asp-validation-for="MatKhauMoi" class="text-danger"></span>
-            </div>
+
+            @if (Model.VaiTro == "HocSinh")
+            {
+                <div class="mb-3">
+                    <label asp-for="MaLopHoc" class="form-label"></label>
+                    <select asp-for="MaLopHoc" class="form-select" asp-items="ViewBag.LopHocList"></select>
+                </div>
+            }
 
             <div class="form-group mt-3">
                 <input type="submit" value="Lưu thay đổi" class="btn btn-primary" />
@@ -32,8 +45,3 @@
         </form>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    @* JavaScript ẩn hiện dropdown lớp học tương tự CreateUser.cshtml *@
-}

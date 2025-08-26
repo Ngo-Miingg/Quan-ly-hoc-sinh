@@ -1,48 +1,54 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Student_Management.Models;
+using System; // Thêm using cho Exception
 
 var builder = WebApplication.CreateBuilder(args);
 
-// === ĐĂNG KÝ CÁC DỊCH VỤ (SERVICES) ===
-
-// 1. Đăng ký dịch vụ MVC
+// 1. Đăng ký các dịch vụ
 builder.Services.AddControllersWithViews();
 
-// 2. Đăng ký DbContext
-// Lấy chuỗi kết nối từ appsettings.json với đúng tên là "DefaultConnection"
+// 2. Đăng ký DbContext (Đoạn này rất quan trọng)
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<QuanLyHocSinhContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
-// 3. Đăng ký Session
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Tùy chỉnh thời gian timeout
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-
-// 4. Đăng ký Cookie Authentication
+// ... các dịch vụ Authentication, Authorization ...
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Auth/Login";
-        options.AccessDeniedPath = "/Auth/AccessDenied";
+    .AddCookie(options => {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
     });
 
-// 5. Đăng ký Authorization (phân quyền)
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin"))
-    .AddPolicy("RequireGiaoVien", policy => policy.RequireRole("GiaoVien"))
-    .AddPolicy("RequireHocSinh", policy => policy.RequireRole("HocSinh"));
-
-
-// ✅ Build ứng dụng sau khi đã đăng ký xong tất cả dịch vụ
 var app = builder.Build();
 
-// === CẤU HÌNH MIDDLEWARE PIPELINE (Thứ tự rất quan trọng) ===
+// ==========================================================
+// === ĐOẠN CODE KIỂM TRA KẾT NỐI DATABASE TRỰC TIẾP ===
+// ==========================================================
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var dbContext = services.GetRequiredService<QuanLyHocSinhContext>();
+        // Thử thực hiện một truy vấn đơn giản nhất
+        var namHocCount = dbContext.NamHocs.Count();
+        // Nếu không có lỗi, in ra thông báo thành công
+        Console.WriteLine($"==========================================================");
+        Console.WriteLine($"KET NOI DATABASE THANH CONG! So luong Nam Hoc: {namHocCount}");
+        Console.WriteLine($"==========================================================");
+    }
+    catch (Exception ex)
+    {
+        // Nếu có lỗi, in ra lỗi chi tiết
+        Console.WriteLine($"==========================================================");
+        Console.WriteLine($"!!! KET NOI DATABASE THAT BAI: {ex.Message}");
+        Console.WriteLine($"==========================================================");
+    }
+}
+// ==========================================================
 
-// 6. Cấu hình cho môi trường Production
+// Cấu hình HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -51,17 +57,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-// Bật session trước khi xác thực và phân quyền
-app.UseSession();
-
-// Bật xác thực và phân quyền
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 7. Map các route cho controller
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

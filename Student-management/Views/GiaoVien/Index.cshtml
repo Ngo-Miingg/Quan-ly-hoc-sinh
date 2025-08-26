@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Student_Management.Models.GiaoVien>
+
+@{
+    ViewData["Title"] = "Danh sách giáo viên";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create">Thêm giáo viên mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HoTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgaySinh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GioiTinh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                Môn học phụ trách
+            </th>
+            <th>
+                Lớp chủ nhiệm
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgaySinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GioiTinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MonHoc.TenMonHoc)
+                </td>
+                <td>
+                    @{
+                        var MaGiaoVienChuNhiem = item.LopHocs.FirstOrDefault();
+                        if (MaGiaoVienChuNhiem != null)
+                        {
+                            @Html.DisplayFor(modelItem => MaGiaoVienChuNhiem.TenLopHoc)
+                        }
+                        else
+                        {
+                            <span>(Chưa có)</span>
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MaGiaoVien">Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.MaGiaoVien">Chi tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MaGiaoVien">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

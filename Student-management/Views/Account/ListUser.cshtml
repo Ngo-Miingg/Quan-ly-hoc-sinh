@@ -18,8 +18,8 @@
                 <td>@item.VaiTro</td>
                 <td>@(item.HocSinh?.HoTen ?? item.GiaoVien?.HoTen ?? "Tài khoản Quản trị")</td>
                 <td>
-                    <a asp-action="EditUser" asp-route-id="@item.MaTaiKhoan">Sửa</a> |
-                    <a asp-action="DeleteUser" asp-route-id="@item.MaTaiKhoan">Xóa</a>
+                    <a asp-action="EditUser" asp-route-id="@item.MaTaiKhoan" class="btn btn-sm btn-outline-secondary">Sửa</a> |
+                    <a asp-action="DeleteUser" asp-route-id="@item.MaTaiKhoan" class="btn btn-sm btn-outline-danger">Xóa</a>
                 </td>
             </tr>
         }

@@ -1,0 +1,87 @@
+﻿@model Student_Management.Models.GiaoVien
+
+@{
+    ViewData["Title"] = "Thông tin chi tiết giáo viên";
+}
+
+<h1>Thông tin chi tiết</h1>
+
+<div>
+    <h4>Giáo viên: @Model.HoTen</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HoTen)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HoTen)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NgaySinh)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NgaySinh)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GioiTinh)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GioiTinh)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            Môn học phụ trách
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MonHoc.TenMonHoc)
+        </dd>
+        <dt class="col-sm-2">
+            Lớp chủ nhiệm
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var lopChuNhiem = Model.LopHocs.FirstOrDefault();
+                if (lopChuNhiem != null)
+                {
+                    @Html.DisplayFor(model => lopChuNhiem.TenLopHoc)
+                }
+                else
+                {
+                    <span>(Chưa có)</span>
+                }
+            }
+        </dd>
+    </dl>
+
+    <h4>Lịch dạy</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Lớp</th>
+                <th>Môn học</th>
+                <th>Ngày</th>
+                <th>Tiết học</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lichHoc in Model.LichHocs)
+            {
+                <tr>
+                    <td>@lichHoc.LopHoc.TenLopHoc</td>
+                    <td>@lichHoc.MonHoc.TenMonHoc</td>
+                    <td>@lichHoc.ThuTrongTuan</td>
+                    <td>@lichHoc.TietHoc</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.MaGiaoVien">Sửa</a> |
+    <a asp-action="Index">Quay lại danh sách</a>
+</div>

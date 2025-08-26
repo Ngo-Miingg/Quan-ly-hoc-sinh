@@ -1,0 +1,35 @@
+﻿@model Student_Management.Models.HocSinh
+
+@{
+    ViewData["Title"] = "Chi tiết Học sinh";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h4 class="my-0 fw-normal">Học sinh: @Model.HoTen</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Họ và Tên</dt>
+            <dd class="col-sm-9">@Model.HoTen</dd>
+
+            <dt class="col-sm-3">Ngày Sinh</dt>
+            <dd class="col-sm-9">@Model.NgaySinh?.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Giới Tính</dt>
+            <dd class="col-sm-9">@Model.GioiTinh</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Lớp</dt>
+            <dd class="col-sm-9">@Model.LopHoc.TenLopHoc</dd>
+        </dl>
+    </div>
+</div>
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.MaHocSinh" class="btn btn-primary">Chỉnh sửa</a>
+    <a asp-action="ByClass" asp-route-id="@Model.MaLopHoc" class="btn btn-secondary">Quay lại Danh sách</a>
+</div>

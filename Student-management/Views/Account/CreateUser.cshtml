@@ -4,16 +4,70 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+<p>Tạo thông tin cá nhân và tài khoản đăng nhập cho người dùng mới.</p>
 <hr />
+
 <div class="row">
     <div class="col-md-8">
-        <form asp-action="CreateUser">
+        <form asp-controller="Account" asp-action="CreateUser" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            @* PHẦN THÔNG TIN CÁ NHÂN BỊ THIẾU *@
             <h4>Thông tin cá nhân</h4>
-            @* ... Các trường input cho HoTen, NgaySinh, Email, GioiTinh ... *@
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="HoTen" class="form-label"></label>
+                    <input asp-for="HoTen" class="form-control" />
+                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NgaySinh" class="form-label"></label>
+                    <input asp-for="NgaySinh" class="form-control" type="date" />
+                    <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="GioiTinh" class="form-label"></label>
+                    <select asp-for="GioiTinh" class="form-select">
+                        <option value="">-- Chọn giới tính --</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                    <span asp-validation-for="GioiTinh" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="SoDienThoai" class="form-label"></label>
+                    <input asp-for="SoDienThoai" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="DiaChi" class="form-label"></label>
+                    <input asp-for="DiaChi" class="form-control" />
+                </div>
+            </div>
 
+            @* PHẦN THÔNG TIN TÀI KHOẢN BỊ THIẾU *@
             <h4 class="mt-4">Thông tin tài khoản và vai trò</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="TenDangNhap" class="form-label"></label>
+                    <input asp-for="TenDangNhap" class="form-control" />
+                    <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="MatKhau" class="form-label"></label>
+                    <input asp-for="MatKhau" class="form-control" type="password" />
+                    <span asp-validation-for="MatKhau" class="text-danger"></span>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label asp-for="VaiTro" class="form-label"></label>
@@ -22,15 +76,22 @@
                         <option value="HocSinh">Học Sinh</option>
                         <option value="GiaoVien">Giáo Viên</option>
                     </select>
+                    <span asp-validation-for="VaiTro" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3" id="lopHocDropdown" style="display:none;">
                     <label asp-for="MaLopHoc" class="form-label"></label>
                     <select asp-for="MaLopHoc" class="form-select" asp-items="ViewBag.LopHocList">
                         <option value="">-- Chọn lớp học --</option>
                     </select>
+                    <span asp-validation-for="MaLopHoc" class="text-danger"></span>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Tạo</button>
+
+            <hr />
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">Tạo người dùng</button>
+                <a asp-action="ListUser" class="btn btn-secondary">Hủy</a>
+            </div>
         </form>
     </div>
 </div>
@@ -41,11 +102,16 @@
         document.addEventListener('DOMContentLoaded', function () {
             const roleSelect = document.getElementById('roleSelect');
             const lopHocDiv = document.getElementById('lopHocDropdown');
-            function toggleLopHoc() {
-                lopHocDiv.style.display = roleSelect.value === 'HocSinh' ? 'block' : 'none';
+
+            function toggleLopHocDropdown() {
+                if (roleSelect.value === 'HocSinh') {
+                    lopHocDiv.style.display = 'block';
+                } else {
+                    lopHocDiv.style.display = 'none';
+                }
             }
-            roleSelect.addEventListener('change', toggleLopHoc);
-            toggleLopHoc(); // Chạy ngay khi tải trang
+            roleSelect.addEventListener('change', toggleLopHocDropdown);
+            toggleLopHocDropdown();
         });
     </script>
 }

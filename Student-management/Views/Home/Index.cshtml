@@ -1,8 +1,31 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@* Phần "Hero" - Lời chào mừng *@
+<div class="text-center p-5 mb-4 bg-light rounded-3 shadow-sm">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Hệ thống Quản lý Học sinh</h1>
+        <p class="fs-4">
+            Chào mừng <strong class="text-primary">@User.Identity?.Name</strong>! Nền tảng tập trung để quản lý thông tin học tập và giảng dạy.
+        </p>
+    </div>
+</div>
+
+@* Phần các thẻ chức năng chính *@
+<div class="row align-items-md-stretch">
+    <div class="col-md-6 mb-4">
+        <div class="h-100 p-5 text-white bg-dark rounded-3 shadow">
+            <h2>Quản lý Toàn diện</h2>
+            <p>Truy cập trang Dashboard để xem tổng quan và sử dụng các chức năng quản trị chính như quản lý tài khoản, lớp học, và năm học.</p>
+            <a class="btn btn-outline-light" asp-controller="Admin" asp-action="Index">Đi đến Dashboard</a>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="h-100 p-5 bg-light border rounded-3 shadow">
+            <h2>Thông tin Cá nhân</h2>
+            <p>Xem và cập nhật thông tin cá nhân, xem lịch học, và theo dõi kết quả học tập của bạn một cách dễ dàng.</p>
+            <button class="btn btn-outline-secondary" type="button" disabled>Xem hồ sơ (Sắp có)</button>
+        </div>
+    </div>
 </div>

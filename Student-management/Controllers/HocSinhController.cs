@@ -47,13 +47,27 @@ namespace Student_Management.Controllers
         }
 
         // GET: HocSinh/Create
+        [HttpGet]
         public IActionResult Create(int? lopId)
         {
-            // Sửa DbSet và các thuộc tính khóa
-            ViewBag.LopHocList = new SelectList(_context.LopHocs, "MaLopHoc", "TenLopHoc", lopId);
-            return View();
-        }
+            if (lopId == null)
+            {
+                // Nếu không có lopId, không biết tạo học sinh cho lớp nào -> báo lỗi hoặc chuyển hướng
+                return BadRequest("Cần phải cung cấp ID của lớp để thêm học sinh.");
+            }
 
+            // Tạo một đối tượng HocSinh mới và gán sẵn MaLopHoc cho nó
+            var hocSinh = new HocSinh
+            {
+                MaLopHoc = lopId.Value
+            };
+
+            // Vẫn gửi danh sách lớp học cho dropdown (dù ít dùng trong trường hợp này)
+            ViewBag.LopHocList = new SelectList(_context.LopHocs, "MaLopHoc", "TenLopHoc", lopId);
+
+            // Gửi đối tượng hocSinh mới này sang cho View
+            return View(hocSinh);
+        }
         // POST: HocSinh/Create
         [HttpPost]
         [ValidateAntiForgeryToken]

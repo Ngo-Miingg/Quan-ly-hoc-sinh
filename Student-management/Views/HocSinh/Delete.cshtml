@@ -1,0 +1,30 @@
+﻿@model Student_Management.Models.HocSinh
+
+@{
+    ViewData["Title"] = "Xác nhận Xóa";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3 class="text-danger">Bạn có chắc chắn muốn xóa học sinh này không?</h3>
+<p class="text-danger">Hành động này không thể hoàn tác.</p>
+
+<div class="card shadow-sm bg-light">
+    <div class="card-body">
+        <h4>Thông tin học sinh</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">Họ và Tên</dt>
+            <dd class="col-sm-9">@Model.HoTen</dd>
+
+            <dt class="col-sm-3">Lớp</dt>
+            <dd class="col-sm-9">@Model.LopHoc.TenLopHoc</dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="MaHocSinh" />
+            <input type="submit" value="Xóa Vĩnh viễn" class="btn btn-danger" />
+            <a asp-action="ByClass" asp-route-id="@Model.MaLopHoc" class="btn btn-secondary">Hủy</a>
+        </form>
+    </div>
+</div>

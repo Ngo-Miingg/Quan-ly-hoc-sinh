@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
 
 namespace Student_Management.Models;
 
@@ -10,40 +9,34 @@ public class EditUserViewModel
 
     [Required(ErrorMessage = "Tên đăng nhập là bắt buộc.")]
     [Display(Name = "Tên đăng nhập")]
-    public string TenDangNhap { get; set; }
+    public string TenDangNhap { get; set; } = string.Empty;
 
-    [Display(Name = "Mật khẩu mới (để trống nếu không đổi)")]
+    [Display(Name = "Mật khẩu mới (Để trống nếu không đổi)")]
     [DataType(DataType.Password)]
     public string? MatKhauMoi { get; set; }
 
-    [Required]
-    [Display(Name = "Vai trò")]
-    public string VaiTro { get; set; }
-
     // Thông tin cá nhân
-    [Required]
+    [Required(ErrorMessage = "Họ tên là bắt buộc.")]
     [Display(Name = "Họ và tên")]
-    public string HoTen { get; set; }
+    public string HoTen { get; set; } = string.Empty;
 
-    [Required]
+    [Required(ErrorMessage = "Ngày sinh là bắt buộc.")]
     [DataType(DataType.Date)]
     [Display(Name = "Ngày sinh")]
     public DateTime NgaySinh { get; set; }
 
-    [Required]
-    [Display(Name = "Giới tính")]
-    public string GioiTinh { get; set; }
-
-    [Required]
+    [Required(ErrorMessage = "Email là bắt buộc.")]
     [EmailAddress]
-    public string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
-    [Display(Name = "Số điện thoại")]
     public string? SoDienThoai { get; set; }
-
-    [Display(Name = "Địa chỉ")]
     public string? DiaChi { get; set; }
+    public string? GioiTinh { get; set; }
 
+    // Dành riêng cho học sinh
     [Display(Name = "Lớp học")]
     public int? MaLopHoc { get; set; }
+
+    // Giữ lại vai trò để biết đang sửa ai
+    public string VaiTro { get; set; } = string.Empty;
 }

@@ -1,0 +1,57 @@
+﻿@model Student_Management.Models.GiaoVien
+
+@{
+    ViewData["Title"] = "Chỉnh sửa giáo viên";
+}
+
+<h1>Chỉnh sửa</h1>
+<h4>Giáo viên: @Model.HoTen</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MaGiaoVien" />
+            <div class="form-group">
+                <label asp-for="HoTen" class="control-label"></label>
+                <input asp-for="HoTen" class="form-control" />
+                <span asp-validation-for="HoTen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NgaySinh" class="control-label"></label>
+                <input asp-for="NgaySinh" class="form-control" />
+                <span asp-validation-for="NgaySinh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GioiTinh" class="control-label"></label>
+                <select asp-for="GioiTinh" class="form-control">
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                </select>
+                <span asp-validation-for="GioiTinh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaMonHoc" class="control-label"></label>
+                <select asp-for="MaMonHoc" class="form-control" asp-items="@(new SelectList(ViewBag.MonHocList, "MaMonHoc", "TenMonHoc"))"></select>
+                <span asp-validation-for="MaMonHoc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="maLopHocChuNhiem" class="control-label">Lớp chủ nhiệm</label>
+                <select name="maLopHocChuNhiem" class="form-control" asp-items="@(new SelectList(ViewBag.LopHocList, "MaLopHoc", "TenLopHoc", ViewBag.MaLopHocChuNhiem))">
+                    <option value="">-- Bỏ trống --</option>
+                </select>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Quay lại danh sách</a>
+</div>

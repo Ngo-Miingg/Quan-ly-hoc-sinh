@@ -9,7 +9,7 @@ public partial class QuanLyHocSinhContext : DbContext
     {
     }
 
-    // --- Các DbSet đã được cập nhật tên ---
+    // --- DbSets ---
     public virtual DbSet<Diem> DiemSos { get; set; }
     public virtual DbSet<GiaoVien> GiaoViens { get; set; }
     public virtual DbSet<HocKy> HocKys { get; set; }
@@ -23,10 +23,10 @@ public partial class QuanLyHocSinhContext : DbContext
     public virtual DbSet<PhongHoc> PhongHocs { get; set; }
     public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
 
-    // --- Cấu hình Fluent API đã được cập nhật toàn bộ ---
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // ... (Toàn bộ phần cấu hình Fluent API của bạn được giữ nguyên ở đây)
+
         modelBuilder.Entity<Diem>(entity =>
         {
             entity.HasKey(e => e.MaDiemSo).HasName("PK_DiemSo");
@@ -82,7 +82,6 @@ public partial class QuanLyHocSinhContext : DbContext
             entity.Property(e => e.MaHocSinh).HasColumnName("MaHS");
             entity.Property(e => e.MaHocKy).HasColumnName("MaHK");
 
-            // THÊM DÒNG NÀY ĐỂ SỬA CẢNH BÁO
             entity.Property(e => e.SoTien).HasColumnType("decimal(18, 2)");
 
             entity.HasOne(d => d.HocSinh).WithMany(p => p.HocPhis)
@@ -119,7 +118,6 @@ public partial class QuanLyHocSinhContext : DbContext
             entity.Property(e => e.MaLopHoc).HasColumnName("MaLop");
             entity.Property(e => e.MaPhongHoc).HasColumnName("MaPhong");
 
-            // Các mối quan hệ của Lịch Học
             entity.HasOne(d => d.GiaoVien).WithMany(p => p.LichHocs).HasForeignKey(d => d.MaGiaoVien).OnDelete(DeleteBehavior.Restrict).HasConstraintName("FK_LichHoc_GiaoVien");
             entity.HasOne(d => d.HocKy).WithMany(p => p.LichHocs).HasForeignKey(d => d.MaHocKy).OnDelete(DeleteBehavior.Restrict).HasConstraintName("FK_LichHoc_HocKy");
             entity.HasOne(d => d.LopHoc).WithMany(p => p.LichHocs).HasForeignKey(d => d.MaLopHoc).OnDelete(DeleteBehavior.Restrict).HasConstraintName("FK_LichHoc_LopHoc");
@@ -166,7 +164,6 @@ public partial class QuanLyHocSinhContext : DbContext
             entity.Property(e => e.MaHocKy).HasColumnName("MaHK");
             entity.Property(e => e.MaLopHoc).HasColumnName("MaLop");
 
-            // Các mối quan hệ của Phân Công Giảng Dạy
             entity.HasOne(d => d.GiaoVien).WithMany(p => p.PhanCongGiangDays).HasForeignKey(d => d.MaGiaoVien).OnDelete(DeleteBehavior.Restrict).HasConstraintName("FK_PhanCong_GiaoVien");
             entity.HasOne(d => d.HocKy).WithMany(p => p.PhanCongGiangDays).HasForeignKey(d => d.MaHocKy).OnDelete(DeleteBehavior.Restrict).HasConstraintName("FK_PhanCong_HocKy");
             entity.HasOne(d => d.LopHoc).WithMany(p => p.PhanCongGiangDays).HasForeignKey(d => d.MaLopHoc).OnDelete(DeleteBehavior.Restrict).HasConstraintName("FK_PhanCong_LopHoc");
@@ -181,7 +178,6 @@ public partial class QuanLyHocSinhContext : DbContext
             entity.Property(e => e.TenPhongHoc).HasColumnName("TenPhong");
         });
 
-        // ... bên trong OnModelCreating
         modelBuilder.Entity<TaiKhoan>(entity =>
         {
             entity.HasKey(e => e.MaTaiKhoan).HasName("PK_TaiKhoan");
@@ -200,22 +196,21 @@ public partial class QuanLyHocSinhContext : DbContext
                 .HasForeignKey(d => d.MaHocSinh)
                 .HasConstraintName("FK_TaiKhoan_HocSinh");
         });
-        // Cập nhật lại Data Seeding với chuỗi hash tĩnh
+
+        // THAY ĐỔI: Mã hóa mật khẩu an toàn khi seed data
         modelBuilder.Entity<TaiKhoan>().HasData(
                 new TaiKhoan
                 {
                     MaTaiKhoan = 1,
                     TenDangNhap = "admin",
-                    // Dán chuỗi hash bạn vừa nhận được vào đây
-                    MatKhau = "$2a$12$9e.gY9.jL5.kL5.kL5.kL.uB9.iB9.iB9.iB9.iB9.iB9.iB9.iB9",
+                    // Mật khẩu mặc định là "admin@123", nhưng được hash an toàn
+                    MatKhau = BCrypt.Net.BCrypt.HashPassword("admin@123"),
                     VaiTro = "Admin"
                 }
             );
-        });
 
         OnModelCreatingPartial(modelBuilder);
     }
 
-    // Phương thức partial để có thể mở rộng về sau
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

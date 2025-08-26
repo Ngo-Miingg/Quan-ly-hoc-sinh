@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Student_Management.Models;
 
@@ -11,13 +12,15 @@ using Student_Management.Models;
 namespace Student_Management.Migrations
 {
     [DbContext(typeof(QuanLyHocSinhContext))]
-    partial class QuanLyHocSinhContextModelSnapshot : ModelSnapshot
+    [Migration("20250826195723_V1_InitialCreate")]
+    partial class V1_InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "8.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -463,7 +466,7 @@ namespace Student_Management.Migrations
                         new
                         {
                             MaTaiKhoan = 1,
-                            MatKhau = "$2a$12$9e.gY9.jL5.kL5.kL5.kL.uB9.iB9.iB9.iB9.iB9.iB9.iB9.iB9",
+                            MatKhau = "$2a$11$1ol1RrfNofzgfWAg49Xw3elTKj6wXPIFbGZBk6UJHV8VYIpgd1ICq",
                             TenDangNhap = "admin",
                             VaiTro = "Admin"
                         });

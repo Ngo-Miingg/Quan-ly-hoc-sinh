@@ -1,0 +1,29 @@
+﻿@model Student_Management.Models.NamHoc
+@{
+    ViewData["Title"] = "Thử nghiệm Tạo Năm học";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="TenNamHoc" class="form-label"></label>
+                <input asp-for="TenNamHoc" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="NgayBatDau" class="form-label"></label>
+                <input asp-for="NgayBatDau" class="form-control" type="date" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="NgayKetThuc" class="form-label"></label>
+                <input asp-for="NgayKetThuc" class="form-control" type="date" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Tạo Thử" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

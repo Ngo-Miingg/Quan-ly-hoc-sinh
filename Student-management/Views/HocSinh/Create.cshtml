@@ -1,0 +1,33 @@
+﻿@model Student_Management.Models.HocSinh
+@{
+    ViewData["Title"] = "Thêm Học sinh";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @* Trường ẩn này để đảm bảo MaLopHoc được gửi đi khi submit form *@
+            <input type="hidden" asp-for="MaLopHoc" />
+
+            <div class="mb-3">
+                <label asp-for="HoTen" class="form-label"></label>
+                <input asp-for="HoTen" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="NgaySinh" class="form-label"></label>
+                <input asp-for="NgaySinh" class="form-control" type="date" />
+            </div>
+            @* Các trường thông tin khác (Email, Giới tính...) *@
+
+            <div class="form-group">
+                <input type="submit" value="Tạo" class="btn btn-primary" />
+                @* Nút quay lại bây giờ sẽ hoạt động vì @Model không còn null *@
+                <a asp-action="ByClass" asp-route-id="@Model.MaLopHoc" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>

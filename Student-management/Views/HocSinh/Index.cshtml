@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Student_Management.Models.Lop>
+@{
+    ViewData["Title"] = "Chọn Lớp học";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="lead">Vui lòng chọn một lớp để xem danh sách học sinh.</p>
+<hr />
+
+<div class="row g-4">
+    @foreach (var lop in Model)
+    {
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Lớp @lop.TenLopHoc</h5>
+                    <p class="card-text text-muted">Năm học: @lop.NamHoc.TenNamHoc</p>
+                    <p class="card-text">GVCN: @(lop.GiaoVienChuNhiem?.HoTen ?? "Chưa có")</p>
+                    <div class="mt-auto">
+                        <a asp-action="ByClass" asp-route-id="@lop.MaLopHoc" class="btn btn-primary">
+                            Xem Danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
