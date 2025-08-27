@@ -11,14 +11,14 @@ public partial class QuanLyHocSinhContext : DbContext
 
     // --- DbSets ---
     public virtual DbSet<Diem> DiemSos { get; set; }
-    public virtual DbSet<GiaoVien> GiaoViens { get; set; }
+    public virtual DbSet<GiaoVien> GiaoViens { get; set; } = null!;
     public virtual DbSet<HocKy> HocKys { get; set; }
     public virtual DbSet<HocPhi> HocPhis { get; set; }
     public virtual DbSet<HocSinh> HocSinhs { get; set; }
     public virtual DbSet<LichHoc> LichHocs { get; set; }
-    public virtual DbSet<Lop> LopHocs { get; set; }
+    public virtual DbSet<Lop> LopHocs { get; set; } = null!;
     public virtual DbSet<MonHoc> MonHocs { get; set; }
-    public virtual DbSet<NamHoc> NamHocs { get; set; }
+    public virtual DbSet<NamHoc> NamHocs { get; set; } = null!;
     public virtual DbSet<PhanCongGiangDay> PhanCongGiangDays { get; set; }
     public virtual DbSet<PhongHoc> PhongHocs { get; set; }
     public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }

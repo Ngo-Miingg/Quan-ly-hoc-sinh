@@ -18,97 +18,70 @@ namespace Student_Management.Controllers
             _context = context;
         }
 
-        // === 1. DANH SÁCH LỚP HỌC (TRANG CHÍNH) ===
-        // GET: /LopHoc
         public async Task<IActionResult> Index()
         {
             var lopHocs = await _context.LopHocs
                 .Include(l => l.NamHoc)
                 .Include(l => l.GiaoVienChuNhiem)
-                .Include(l => l.HocSinhs)
-                .AsNoTracking()
                 .ToListAsync();
             return View(lopHocs);
         }
 
-        // === 2. THÔNG TIN CHI TIẾT LỚP HỌC ===
-        // GET: /LopHoc/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
             var lopHoc = await _context.LopHocs
                 .Include(l => l.NamHoc)
                 .Include(l => l.GiaoVienChuNhiem)
                 .Include(l => l.HocSinhs)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.MaNamHoc == id);
-
-            if (lopHoc == null)
-            {
-                return NotFound();
-            }
-
+                .FirstOrDefaultAsync(m => m.MaLopHoc == id);
+            if (lopHoc == null) return NotFound();
             return View(lopHoc);
         }
 
-        // === 3. TẠO LỚP HỌC MỚI ===
-        // GET: /LopHoc/Create
+        // GET: LopHoc/Create
         public async Task<IActionResult> Create()
         {
             await PopulateDropdowns();
-            return View(new Lop()); // Trả về một đối tượng mới để tránh lỗi NullReferenceException
+            return View(new Lop()); // Model trống
         }
 
+        // POST: LopHoc/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TenLopHoc,SiSo,MaNamHoc,MaGiaoVienChuNhiem")] Lop lopHoc)
+        public async Task<IActionResult> Create(Lop lopHoc)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(lopHoc);
+                _context.LopHocs.Add(lopHoc);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // Nếu có lỗi validate, reload dropdown
             await PopulateDropdowns(lopHoc.MaNamHoc, lopHoc.MaGiaoVienChuNhiem);
             return View(lopHoc);
         }
 
-        // === 4. SỬA THÔNG TIN LỚP HỌC ===
-        // GET: /LopHoc/Edit/5
-        // GET: /LopHoc/Edit/5
+
+        // GET: LopHoc/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            // Tìm lớp học
             var lopHoc = await _context.LopHocs.FindAsync(id);
+            if (lopHoc == null) return NotFound();
 
-            if (lopHoc == null)
-            {
-                // Nếu không tìm thấy, trả về trang 404
-                return NotFound();
-            }
-
-            // Nếu tìm thấy, tiếp tục xử lý
             await PopulateDropdowns(lopHoc.MaNamHoc, lopHoc.MaGiaoVienChuNhiem);
             return View(lopHoc);
         }
 
+        // POST: LopHoc/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaLopHoc,TenLopHoc,SiSo,MaNamHoc,MaGiaoVienChuNhiem")] Lop lopHoc)
+        public async Task<IActionResult> Edit(int id, Lop lopHoc)
         {
-            if (id != lopHoc.MaLopHoc)
-            {
-                return NotFound();
-            }
+            if (id != lopHoc.MaLopHoc) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -120,37 +93,36 @@ namespace Student_Management.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!_context.LopHocs.Any(e => e.MaLopHoc == lopHoc.MaLopHoc))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // Nếu lỗi validate, reload dropdown
             await PopulateDropdowns(lopHoc.MaNamHoc, lopHoc.MaGiaoVienChuNhiem);
             return View(lopHoc);
         }
 
-        // === 5. XÓA LỚP HỌC ===
-        // GET: /LopHoc/Delete/5
+
+        // --- Xóa lớp học ---
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
             var lopHoc = await _context.LopHocs
                 .Include(l => l.NamHoc)
                 .Include(l => l.GiaoVienChuNhiem)
-                .Include(l => l.HocSinhs)
                 .FirstOrDefaultAsync(m => m.MaLopHoc == id);
-            if (lopHoc == null)
+            if (lopHoc == null) return NotFound();
+
+            var hasStudents = await _context.HocSinhs.AnyAsync(s => s.MaLopHoc == id);
+            if (hasStudents)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Không thể xóa lớp học này vì vẫn còn học sinh trong lớp.";
+                return RedirectToAction(nameof(Index));
             }
+
             return View(lopHoc);
         }
 
@@ -161,17 +133,28 @@ namespace Student_Management.Controllers
             var lopHoc = await _context.LopHocs.FindAsync(id);
             if (lopHoc != null)
             {
+                var hasStudents = await _context.HocSinhs.AnyAsync(s => s.MaLopHoc == id);
+                if (hasStudents)
+                {
+                    TempData["ErrorMessage"] = "Không thể xóa lớp học này vì vẫn còn học sinh trong lớp.";
+                    return RedirectToAction(nameof(Index));
+                }
+
                 _context.LopHocs.Remove(lopHoc);
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
         }
 
-        // === 6. HÀM TIỆN ÍCH CHO DROPDOWN ===
+        // Hàm tiện ích tạo dropdown
         private async Task PopulateDropdowns(object? selectedNamHoc = null, object? selectedGiaoVien = null)
         {
-            ViewBag.NamHocList = new SelectList(await _context.NamHocs.AsNoTracking().ToListAsync(), "MaNamHoc", "TenNamHoc", selectedNamHoc);
-            ViewBag.GiaoVienList = new SelectList(await _context.GiaoViens.AsNoTracking().ToListAsync(), "MaGiaoVien", "TenGiaoVien", selectedGiaoVien);
+            var namHocs = await _context.NamHocs.ToListAsync() ?? new List<NamHoc>();
+            var giaoViens = await _context.GiaoViens.ToListAsync() ?? new List<GiaoVien>();
+
+            ViewBag.NamHocList = new SelectList(namHocs, "MaNamHoc", "TenNamHoc", selectedNamHoc);
+            ViewBag.GiaoVienList = new SelectList(giaoViens, "MaGiaoVien", "HoTen", selectedGiaoVien);
         }
+
     }
 }

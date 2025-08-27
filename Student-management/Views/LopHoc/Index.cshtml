@@ -1,28 +1,67 @@
 ﻿@model IEnumerable<Student_Management.Models.Lop>
+
 @{
-    ViewData["Title"] = "Quản lý Lớp học";
+    ViewData["Title"] = "Danh sách lớp học";
 }
 
 <h1>@ViewData["Title"]</h1>
-<p><a asp-action="Create" class="btn btn-primary">Tạo Lớp học Mới</a></p>
+
+<p>
+    <a asp-action="Create">Tạo lớp học mới</a>
+</p>
 
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
 }
 
-<table class="table table-hover">
-    <thead class="table-light">
-        <tr><th>Tên Lớp</th><th>Năm Học</th><th>GV Chủ nhiệm</th><th>Sĩ Số</th><th></th></tr>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TenLopHoc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SiSo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NamHoc)
+            </th>
+            <th>
+                Giáo viên chủ nhiệm
+            </th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.TenLopHoc</td>
-                <td>@item.NamHoc.TenNamHoc</td>
-                <td>@(item.GiaoVienChuNhiem?.HoTen ?? "Chưa có")</td>
-                <td>@item.HocSinhs.Count()</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenLopHoc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SiSo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NamHoc.TenNamHoc)
+                </td>
+                <td>
+                    @{
+                        // Thêm kiểm tra null tại đây
+                        if (item.GiaoVienChuNhiem != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.GiaoVienChuNhiem.HoTen)
+                        }
+                        else
+                        {
+                            <span>(Chưa có)</span>
+                        }
+                    }
+
+                </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.MaLopHoc">Sửa</a> |
                     <a asp-action="Details" asp-route-id="@item.MaLopHoc">Chi tiết</a> |

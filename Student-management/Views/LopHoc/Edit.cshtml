@@ -1,52 +1,58 @@
 ﻿@model Student_Management.Models.Lop
 
 @{
-    ViewData["Title"] = "Chỉnh sửa thông tin lớp học";
+    ViewData["Title"] = "Sửa thông tin lớp học";
 }
 
-<h1>Chỉnh sửa</h1>
-<h4>Lớp học: @Model.TenLopHoc</h4>
-<hr />
+<h2>@ViewData["Title"]</h2>
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MaLopHoc" />
-            <div class="form-group">
-                <label asp-for="TenLopHoc" class="control-label"></label>
-                <input asp-for="TenLopHoc" class="form-control" />
-                <span asp-validation-for="TenLopHoc" class="text-danger"></span>
+    <div class="col-md-6">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.MaLopHoc) <!-- Giữ khóa chính -->
+
+            <div class="form-group mb-3">
+                @Html.LabelFor(m => m.TenLopHoc)
+                @Html.TextBoxFor(m => m.TenLopHoc, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.TenLopHoc, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="SiSo" class="control-label"></label>
-                <input asp-for="SiSo" class="form-control" />
-                <span asp-validation-for="SiSo" class="text-danger"></span>
+
+            <div class="form-group mb-3">
+                @Html.LabelFor(m => m.SiSo)
+                @Html.TextBoxFor(m => m.SiSo, new { @class = "form-control", type = "number", min = "0" })
+                @Html.ValidationMessageFor(m => m.SiSo, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="MaNamHoc" class="control-label"></label>
-                <select asp-for="MaNamHoc" class="form-control" asp-items="ViewBag.NamHocList"></select>
-                <span asp-validation-for="MaNamHoc" class="text-danger"></span>
+
+            <div class="form-group mb-3">
+                @Html.LabelFor(m => m.MaNamHoc, "Năm học")
+                @Html.DropDownListFor(
+                    m => m.MaNamHoc,
+                    ViewBag.NamHocList as SelectList ?? new SelectList(Enumerable.Empty<object>()),
+                    "Chọn năm học",
+                    new { @class="form-control" }
+                )
+                @Html.ValidationMessageFor(m => m.MaNamHoc, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label asp-for="MaGiaoVienChuNhiem" class="control-label">Giáo viên chủ nhiệm</label>
-                <select asp-for="MaGiaoVienChuNhiem" class="form-control" asp-items="ViewBag.GiaoVienList">
-                    <option value="">-- Bỏ trống --</option>
-                </select>
-                <span asp-validation-for="MaGiaoVienChuNhiem" class="text-danger"></span>
+
+            <div class="form-group mb-3">
+                @Html.LabelFor(m => m.MaGiaoVienChuNhiem, "Giáo viên chủ nhiệm")
+                @Html.DropDownListFor(
+                    m => m.MaGiaoVienChuNhiem,
+                    ViewBag.GiaoVienList as SelectList ?? new SelectList(Enumerable.Empty<object>()),
+                    "Chọn giáo viên",
+                    new { @class="form-control" }
+                )
+                @Html.ValidationMessageFor(m => m.MaGiaoVienChuNhiem, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group mt-3">
-                <input type="submit" value="Lưu" class="btn btn-primary" />
-            </div>
-        </form>
+
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+        }
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Quay lại danh sách</a>
-</div>
-
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

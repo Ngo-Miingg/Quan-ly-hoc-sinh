@@ -1,0 +1,45 @@
+﻿@model Student_Management.Models.Lop
+
+@{
+    ViewData["Title"] = "Xóa lớp học";
+}
+
+<h1>Xóa</h1>
+
+<h3>Bạn có chắc chắn muốn xóa lớp học này?</h3>
+<div>
+    <h4>Lớp học: @Html.DisplayFor(model => model.TenLopHoc)</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TenLopHoc)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TenLopHoc)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SiSo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SiSo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NamHoc)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NamHoc.TenNamHoc)
+        </dd>
+        <dt class="col-sm-2">
+            Giáo viên chủ nhiệm
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GiaoVienChuNhiem)
+        </dd>
+        </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="MaLopHoc" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index">Quay lại danh sách</a>
+    </form>
+</div>
